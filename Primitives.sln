@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalavarda.Primitives", "Kalavarda.Primitives\Kalavarda.Primitives.csproj", "{5C9B686E-993B-4BE8-89D1-723D972285E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalavarda.Primitives.Tests", "Kalavarda.Primitives.Tests\Kalavarda.Primitives.Tests.csproj", "{A7D02E5F-F499-40AE-B262-2E1E07DA7DF3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5C9B686E-993B-4BE8-89D1-723D972285E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C9B686E-993B-4BE8-89D1-723D972285E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C9B686E-993B-4BE8-89D1-723D972285E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C9B686E-993B-4BE8-89D1-723D972285E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7D02E5F-F499-40AE-B262-2E1E07DA7DF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7D02E5F-F499-40AE-B262-2E1E07DA7DF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7D02E5F-F499-40AE-B262-2E1E07DA7DF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7D02E5F-F499-40AE-B262-2E1E07DA7DF3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4B01E7D9-4E86-4EA2-AD86-CF7385971418}
+	EndGlobalSection
+EndGlobal
