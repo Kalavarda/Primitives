@@ -65,6 +65,12 @@ namespace Kalavarda.Primitives.Geometry
             Changed?.Invoke(this);
         }
 
+        public void Set(PointF p)
+        {
+            if (p == null) throw new ArgumentNullException(nameof(p));
+            Set(p.X, p.Y);
+        }
+
         /// <summary>
         /// Находит точку на прямой до точки <see cref="target"/>, на расстоянии расстояние <see cref="distance"/>
         /// </summary>

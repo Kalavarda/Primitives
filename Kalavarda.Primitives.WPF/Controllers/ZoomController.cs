@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Kalavarda.Primitives.Controllers
@@ -10,20 +11,26 @@ namespace Kalavarda.Primitives.Controllers
         private const double ZoomSpeed = 0.25;
         private const double MaxZoom = 1000;
 
+        private readonly IInputElement _inputElement;
         private readonly Canvas _canvas;
         private readonly ScaleTransform _scaleTransform;
         private readonly TranslateTransform _translateTransform;
 
         public ZoomController(IInputElement inputElement, Canvas canvas, ScaleTransform scaleTransform, TranslateTransform translateTransform)
         {
+            _inputElement = inputElement ?? throw new ArgumentNullException(nameof(inputElement));
             _canvas = canvas ?? throw new ArgumentNullException(nameof(canvas));
             _scaleTransform = scaleTransform ?? throw new ArgumentNullException(nameof(scaleTransform));
             _translateTransform = translateTransform ?? throw new ArgumentNullException(nameof(translateTransform));
+        
             inputElement.MouseWheel += UiElement_MouseWheel;
         }
 
-        private void UiElement_MouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        private void UiElement_MouseWheel(object sender, MouseWheelEventArgs e)
         {
+            if ((Keyboard.Modifiers & ModifierKeys.Control) == 0)
+                return;
+
             var d = 1 + Math.Abs(ZoomSpeed * e.Delta / 100d);
             if (e.Delta < 0)
                 d = 1 / d;

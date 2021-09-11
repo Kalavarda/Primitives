@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 
 namespace Kalavarda.Primitives
 {
+    [DebuggerDisplay("{Value} (min={Min}; max={Max})")]
     public class RangeF
     {
         private const float DeltaF = 0.0001f;

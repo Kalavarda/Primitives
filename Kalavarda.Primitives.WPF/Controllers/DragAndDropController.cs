@@ -7,17 +7,17 @@ namespace Kalavarda.Primitives.Controllers
 {
     public class DragAndDropController
     {
+        private const ModifierKeys ModifierKey = ModifierKeys.Control;
+
         private readonly UIElement _uiElement;
         private readonly TranslateTransform _translateTransform;
-        private readonly ScaleTransform _scaleTransform;
         private Point _startPosition;
         private Point _startTranslate;
 
-        public DragAndDropController(UIElement uiElement, TranslateTransform translateTransform, ScaleTransform scaleTransform)
+        public DragAndDropController(UIElement uiElement, TranslateTransform translateTransform)
         {
             _uiElement = uiElement ?? throw new ArgumentNullException(nameof(uiElement));
             _translateTransform = translateTransform ?? throw new ArgumentNullException(nameof(translateTransform));
-            _scaleTransform = scaleTransform ?? throw new ArgumentNullException(nameof(scaleTransform));
 
             _uiElement.MouseDown += UiElement_MouseDown;
             _uiElement.MouseMove += UiElement_MouseMove;
@@ -26,6 +26,10 @@ namespace Kalavarda.Primitives.Controllers
 
         private void UiElement_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if ((Keyboard.Modifiers & ModifierKey) == 0)
+                return;
+
+
             if (e.ChangedButton != MouseButton.Middle)
                 return;
 
@@ -38,6 +42,9 @@ namespace Kalavarda.Primitives.Controllers
 
         private void UiElement_MouseMove(object sender, MouseEventArgs e)
         {
+            if ((Keyboard.Modifiers & ModifierKey) == 0)
+                return;
+
             if (!_uiElement.IsMouseCaptured)
                 return;
 
@@ -52,11 +59,21 @@ namespace Kalavarda.Primitives.Controllers
 
         private void UiElement_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            if ((Keyboard.Modifiers & ModifierKey) == 0)
+                return;
+
             if (e.ChangedButton != MouseButton.Middle)
                 return;
 
             if (_uiElement.IsMouseCaptured)
                 _uiElement.ReleaseMouseCapture();
+        }
+
+        public void ToCenter()
+        {
+            var frameworkElement = (FrameworkElement)_uiElement;
+            _translateTransform.X = frameworkElement.ActualWidth / 2;
+            _translateTransform.Y = frameworkElement.ActualHeight / 2;
         }
     }
 }
