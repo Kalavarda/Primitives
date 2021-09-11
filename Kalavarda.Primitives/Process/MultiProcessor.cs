@@ -9,6 +9,7 @@ namespace Kalavarda.Primitives.Process
     {
         private readonly Processor[] _processors;
         private byte _nextProcess;
+        private bool _paused;
 
         public MultiProcessor(int maxFrequency, CancellationToken cancellationToken)
         {
@@ -37,6 +38,21 @@ namespace Kalavarda.Primitives.Process
             foreach (var p in _processors)
                 result = result.Union(p.Get(whereClause));
             return result;
+        }
+
+        public bool Paused
+        {
+            get => _paused;
+            set
+            {
+                if (_paused == value)
+                    return;
+
+                _paused = value;
+
+                foreach (var p in _processors)
+                    p.Paused = _paused;
+            }
         }
     }
 }

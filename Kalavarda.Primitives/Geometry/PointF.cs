@@ -36,11 +36,11 @@ namespace Kalavarda.Primitives.Geometry
             return MathF.Atan2(p.Y - Y, p.X - X);
         }
 
-        public float DistanceTo(Bounds bounds)
+        public float DistanceTo(BoundsF bounds)
         {
             if (bounds == null) throw new ArgumentNullException(nameof(bounds));
 
-            var distance = DistanceTo(bounds.Center);
+            var distance = DistanceTo(bounds.Position);
 
             if (bounds is RoundBounds round)
                 return distance <= round.Radius ? 0 : distance - round.Radius;

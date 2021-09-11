@@ -11,5 +11,7 @@ namespace Kalavarda.Primitives.Process
         /// Выбирает все процессы указанного типа, подходящие под условие
         /// </summary>
         IEnumerable<T> Get<T>(Func<T, bool> whereClause = null) where T: IProcess;
+
+        bool Paused { get; set; }
     }
 }

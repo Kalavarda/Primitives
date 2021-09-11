@@ -32,6 +32,8 @@ namespace Kalavarda.Primitives.Process
             return result;
         }
 
+        public bool Paused { get; set; }
+
         private void ProcessCompleted(IProcess process)
         {
             _processes.Remove(process);
@@ -56,7 +58,8 @@ namespace Kalavarda.Primitives.Process
                     {
                         if (!_times.TryGetValue(p, out var lastTime))
                             lastTime = DateTime.Now;
-                        p.Process(DateTime.Now - lastTime);
+                        if (!Paused)
+                            p.Process(DateTime.Now - lastTime);
                         _times[p] = DateTime.Now;
                     }
 
