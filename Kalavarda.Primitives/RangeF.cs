@@ -100,6 +100,11 @@ namespace Kalavarda.Primitives
             Max = max;
         }
 
+        public void SetMin()
+        {
+            Value = Min;
+        }
+
         public void SetMax()
         {
             Value = Max;
