@@ -69,16 +69,15 @@ namespace Kalavarda.Primitives.Tests
             public float MaxDistance { get; set; }
 
             public ITimeLimiter TimeLimiter { get; }
+            public IProcess Use(ISkilled initializer)
+            {
+                throw new NotImplementedException();
+            }
 
             public TestSkill(TimeSpan remain)
             {
                 _timeLimiter.Setup(tl => tl.Remain).Returns(remain);
                 TimeLimiter = _timeLimiter.Object;
-            }
-
-            public IProcess Use()
-            {
-                throw new NotImplementedException();
             }
 
             public TimeSpan Cooldown { get; set; }

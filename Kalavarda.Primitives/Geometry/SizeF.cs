@@ -1,5 +1,8 @@
-﻿namespace Kalavarda.Primitives.Geometry
+﻿using System.Diagnostics;
+
+namespace Kalavarda.Primitives.Geometry
 {
+    [DebuggerDisplay("{Width}; {Height}")]
     public class SizeF
     {
         public float Width { get; set; }

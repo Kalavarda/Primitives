@@ -10,7 +10,13 @@ namespace Kalavarda.Primitives.Geometry
         /// </summary>
         public PointF Position { get; }
 
-        public abstract bool DoesIntersect(PointF p);
+        public abstract bool DoesIntersect(float x, float y);
+
+        public bool DoesIntersect(PointF p)
+        {
+            if (p == null) throw new ArgumentNullException(nameof(p));
+            return DoesIntersect(p.X, p.Y);
+        }
 
         public abstract bool DoesIntersect(BoundsF b);
 
@@ -38,9 +44,9 @@ namespace Kalavarda.Primitives.Geometry
             Radius = radius;
         }
 
-        public override bool DoesIntersect(PointF p)
+        public override bool DoesIntersect(float x, float y)
         {
-            return Position.DistanceTo(p) <= Radius;
+            throw new NotImplementedException();
         }
 
         public override bool DoesIntersect(BoundsF b)
@@ -61,9 +67,24 @@ namespace Kalavarda.Primitives.Geometry
 
     public class RectBounds : BoundsF
     {
-        public override bool DoesIntersect(PointF p)
+        public override bool DoesIntersect(float x, float y)
         {
-            throw new NotImplementedException();
+            var x1 = Position.X - Width / 2;
+            var x2 = Position.X + Width / 2;
+            var y1 = Position.Y - Height / 2;
+            var y2 = Position.Y + Height / 2;
+            var minX = MathF.Min(x1, x2);
+            var maxX = MathF.Max(x1, x2);
+            var minY = MathF.Min(y1, y2);
+            var maxY = MathF.Max(y1, y2);
+
+            if (x < minX || x > maxX)
+                return false;
+
+            if (y < minY || y > maxY)
+                return false;
+
+            return true;
         }
 
         public override bool DoesIntersect(BoundsF b)
@@ -74,6 +95,10 @@ namespace Kalavarda.Primitives.Geometry
         public override BoundsF DeepClone()
         {
             throw new NotImplementedException();
+        }
+
+        public RectBounds(PointF center, SizeF size) : base(center, size)
+        {
         }
 
         public RectBounds(PointF center) : base(center, new SizeF())
