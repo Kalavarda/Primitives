@@ -11,7 +11,7 @@ namespace Kalavarda.Primitives
 
     public class TimeLimiter : ITimeLimiter
     {
-        private DateTime _lastTime = DateTime.MinValue;
+        private DateTime _lastTime;
 
         public TimeSpan Interval { get; set; }
 
@@ -26,9 +26,15 @@ namespace Kalavarda.Primitives
             }
         }
 
-        public TimeLimiter(TimeSpan interval)
+        public TimeLimiter(TimeSpan interval): this(interval, TimeSpan.Zero)
         {
             Interval = interval;
+        }
+
+        public TimeLimiter(TimeSpan interval, TimeSpan firstTimeDelay)
+        {
+            Interval = interval;
+            _lastTime = DateTime.Now + firstTimeDelay - interval;
         }
 
         public void Do(Action action)

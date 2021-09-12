@@ -26,5 +26,7 @@ namespace Kalavarda.Primitives.WPF.Skills
         IReadOnlyCollection<SkillBind> SkillBinds { get; }
 
         ISkill GetSkill(string key);
+
+        SkillBind GetBind(string key);
     }
 }

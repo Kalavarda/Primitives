@@ -15,10 +15,10 @@ namespace Kalavarda.Primitives.Skills
 
         public float MaxDistance { get; }
 
-        protected SkillBase(float maxDistance, TimeSpan interval, ISkillProcessFactory processFactory)
+        protected SkillBase(float maxDistance, TimeSpan interval, ISkillProcessFactory processFactory, TimeSpan? firstTimeDelay = null)
         {
             MaxDistance = maxDistance;
-            _timeLimiter = new TimeLimiter(interval);
+            _timeLimiter = firstTimeDelay != null ? new TimeLimiter(interval, firstTimeDelay.Value) : new TimeLimiter(interval);
             _processFactory = processFactory ?? throw new ArgumentNullException(nameof(processFactory));
         }
 
