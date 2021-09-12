@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Kalavarda.Primitives.Skills
 {
@@ -15,7 +16,7 @@ namespace Kalavarda.Primitives.Skills
 
     public interface IChildItemsContainer
     {
-        //IReadOnlyCollection<IChildItem> ChildItems { get; }
+        IReadOnlyCollection<IChildItem> ChildItems { get; }
 
         event Action<IChildItemsContainer, IChildItem> ChildItemAdded;
 
@@ -37,6 +38,15 @@ namespace Kalavarda.Primitives.Skills
     public class ChildItemsContainer: IChildItemsContainerExt
     {
         private readonly ICollection<IChildItem> _childItems = new List<IChildItem>();
+
+        public IReadOnlyCollection<IChildItem> ChildItems
+        {
+            get
+            {
+                lock (_childItems)
+                    return _childItems.ToArray();
+            }
+        }
 
         public event Action<IChildItemsContainer, IChildItem> ChildItemAdded;
         public event Action<IChildItemsContainer, IChildItem> ChildItemRemoved;
@@ -60,14 +70,15 @@ namespace Kalavarda.Primitives.Skills
 
     public class ChildItemsAggregator: IChildItemsContainer
     {
-        private ICollection<IChildItemsContainer> _containers = new List<IChildItemsContainer>();
+        private readonly ICollection<IChildItemsContainer> _containers = new List<IChildItemsContainer>();
 
         public void Add(IChildItemsContainer container)
         {
             if (container == null) throw new ArgumentNullException(nameof(container));
             container.ChildItemAdded += Container_ChildItemAdded;
             container.ChildItemRemoved += Container_ChildItemRemoved;
-            _containers.Add(container);
+            lock (_containers)
+                _containers.Add(container);
         }
 
         public void Remove(IChildItemsContainer container)
@@ -75,7 +86,8 @@ namespace Kalavarda.Primitives.Skills
             if (container == null) throw new ArgumentNullException(nameof(container));
             container.ChildItemAdded -= Container_ChildItemAdded;
             container.ChildItemRemoved -= Container_ChildItemRemoved;
-            _containers.Remove(container);
+            lock (_containers)
+                _containers.Remove(container);
         }
 
         public void Add(IChildItemsOwner owner)
@@ -88,6 +100,8 @@ namespace Kalavarda.Primitives.Skills
         {
             if (owner == null) throw new ArgumentNullException(nameof(owner));
             Remove(owner.ChildItemsContainer);
+            foreach (var childItem in owner.ChildItemsContainer.ChildItems)
+                Container_ChildItemRemoved(this, childItem);
         }
 
         private void Container_ChildItemAdded(IChildItemsContainer container, IChildItem childItem)
@@ -98,6 +112,15 @@ namespace Kalavarda.Primitives.Skills
         private void Container_ChildItemRemoved(IChildItemsContainer container, IChildItem childItem)
         {
             ChildItemRemoved?.Invoke(container, childItem);
+        }
+
+        public IReadOnlyCollection<IChildItem> ChildItems
+        {
+            get
+            {
+                lock (_containers)
+                    return _containers.SelectMany(c => c.ChildItems).Distinct().ToArray();
+            }
         }
 
         public event Action<IChildItemsContainer, IChildItem> ChildItemAdded;

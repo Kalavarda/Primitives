@@ -8,14 +8,15 @@ namespace Kalavarda.Primitives.WPF.Controllers
     public class PositionController: IDisposable
     {
         private readonly FrameworkElement _frameworkElement;
-        private readonly IHasPosition _hasPosition;
+        
+        public IHasPosition Object { get; set; }
 
         public PositionController(FrameworkElement frameworkElement, IHasPosition hasPosition)
         {
             _frameworkElement = frameworkElement ?? throw new ArgumentNullException(nameof(frameworkElement));
-            _hasPosition = hasPosition ?? throw new ArgumentNullException(nameof(hasPosition));
+            Object = hasPosition ?? throw new ArgumentNullException(nameof(hasPosition));
 
-            _hasPosition.Position.Changed += Position_Changed;
+            Object.Position.Changed += Position_Changed;
             Position_Changed(hasPosition.Position);
         }
 
@@ -30,7 +31,7 @@ namespace Kalavarda.Primitives.WPF.Controllers
 
         public void Dispose()
         {
-            _hasPosition.Position.Changed -= Position_Changed;
+            Object.Position.Changed -= Position_Changed;
         }
     }
 }

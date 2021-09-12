@@ -1,4 +1,5 @@
 ﻿using System.Windows.Media;
+using Kalavarda.Primitives.Utils;
 
 namespace Kalavarda.Primitives.WPF.Controls
 {
@@ -38,6 +39,7 @@ namespace Kalavarda.Primitives.WPF.Controls
             this.Do(() =>
             {
                 _front.Width = ActualWidth * range.ValueN;
+                _tb.Text = range.Value.ToStr() + " / " + (range.Max - range.Min).ToStr();
             });
         }
 
