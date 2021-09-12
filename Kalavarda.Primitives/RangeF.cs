@@ -111,5 +111,11 @@ namespace Kalavarda.Primitives
         {
             Value = Max;
         }
+
+        [JsonIgnore]
+        public bool IsMin => MathF.Abs(Value - Min) < DeltaF;
+
+        [JsonIgnore]
+        public bool IsMax => MathF.Abs(Max - Value) < DeltaF;
     }
 }

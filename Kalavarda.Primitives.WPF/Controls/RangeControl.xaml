@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="Kalavarda.Primitives.WPF.Controls.RangeControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
+    <Grid ToolTip="{Binding ElementName=_tb, Path=Text}">
         <Rectangle x:Name="_back" Fill="White" Opacity="0.25"/>
         <Rectangle x:Name="_front" Fill="{Binding ElementName=_back, Mode=OneWay, Path=Fill}" HorizontalAlignment="Left"/>
         <TextBlock x:Name="_tb" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5, 0"/>
