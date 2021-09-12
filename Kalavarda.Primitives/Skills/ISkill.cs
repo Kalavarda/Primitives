@@ -12,4 +12,9 @@ namespace Kalavarda.Primitives.Skills
 
         IProcess Use(ISkilled initializer);
     }
+
+    public interface IHasKey
+    {
+        string Key { get; }
+    }
 }
