@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using Kalavarda.Primitives.Abstract;
 using Kalavarda.Primitives.Skills;
 using Kalavarda.Primitives.Utils;
+using Kalavarda.Primitives.WPF.Abstract;
 using Kalavarda.Primitives.WPF.Skills;
 
 namespace Kalavarda.Primitives.WPF.Controls
@@ -34,6 +37,12 @@ namespace Kalavarda.Primitives.WPF.Controls
                         hasCount.CountChanged += HasCount_CountChanged;
                         HasCount_CountChanged(hasCount);
                     }
+
+                    if (_skill is IHasImage hasImage)
+                    {
+                        _image.Visibility = Visibility.Visible;
+                        _image.Source = new BitmapImage(hasImage.ImageUri);
+                    }
                 }
                 else
                 {
@@ -48,9 +57,12 @@ namespace Kalavarda.Primitives.WPF.Controls
         {
             this.Do(() =>
             {
+                _count.Visibility = Visibility.Visible;
                 _count.Text = hasCount.Max == null
                     ? hasCount.Count.ToStr()
                     : $"{hasCount.Count.ToStr()} / {hasCount.Max.Value.ToStr()}";
+
+                _image.Opacity = hasCount.Count > 0 ? 1 : 0.25;
             });
         }
 

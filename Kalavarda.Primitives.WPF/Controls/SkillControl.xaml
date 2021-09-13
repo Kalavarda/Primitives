@@ -4,8 +4,9 @@
              Width="48" Height="48">
     <Border x:Name="_border" CornerRadius="2" Background="#80000000" Margin="0,1,0,-1">
         <Grid>
+            <Image x:Name="_image" Visibility="Collapsed"/>
             <TextBlock x:Name="_tbBind" Foreground="White" Opacity="0.5" Margin="2" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <TextBlock x:Name="_count" Foreground="White" Opacity="0.5" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="8"/>
+            <TextBlock x:Name="_count" Foreground="White" Opacity="0.5" Margin="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" FontSize="8" Visibility="Collapsed"/>
             <Rectangle x:Name="_rectCooldown" Fill="#40FF0000">
                 <Rectangle.RenderTransform>
                     <ScaleTransform x:Name="_scale"/>
