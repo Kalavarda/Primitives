@@ -25,7 +25,7 @@ namespace Kalavarda.Primitives.Utils
                 return s;
             }
 
-            return MathF.Round(value).ToString("### ### ###", CultInfo).Trim();
+            return MathF.Round(value).ToString("### ### ### ### ### ### ###", CultInfo).Trim();
         }
 
         public static string ToStr(this decimal value)
@@ -37,7 +37,7 @@ namespace Kalavarda.Primitives.Utils
         {
             if (value < 1000)
                 return value.ToString();
-            return value.ToString("### ### ###").Trim();
+            return value.ToString("### ### ### ### ### ### ###").Trim();
         }
     }
 }
