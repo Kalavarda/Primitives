@@ -23,5 +23,10 @@ namespace Kalavarda.Primitives.Utils
         {
             return Rand.NextDouble();
         }
+
+        public int Int(int min, int max)
+        {
+            return Rand.Next(min, max + 1);
+        }
     }
 }

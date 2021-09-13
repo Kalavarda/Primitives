@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Threading;
 using Kalavarda.Primitives.Skills;
+using Kalavarda.Primitives.Utils;
 using Kalavarda.Primitives.WPF.Skills;
 
 namespace Kalavarda.Primitives.WPF.Controls
@@ -27,6 +28,12 @@ namespace Kalavarda.Primitives.WPF.Controls
                     _border.ToolTip = _skill.Name;
                     _timer.Start();
                     _rectCooldown.Visibility = Visibility.Visible;
+
+                    if (_skill is IHasCount<long> hasCount)
+                    {
+                        hasCount.CountChanged += HasCount_CountChanged;
+                        HasCount_CountChanged(hasCount);
+                    }
                 }
                 else
                 {
@@ -35,6 +42,16 @@ namespace Kalavarda.Primitives.WPF.Controls
                     _timer.Start();
                 }
             }
+        }
+
+        private void HasCount_CountChanged(IHasCount<long> hasCount)
+        {
+            this.Do(() =>
+            {
+                _count.Text = hasCount.Max == null
+                    ? hasCount.Count.ToStr()
+                    : $"{hasCount.Count.ToStr()} / {hasCount.Max.Value.ToStr()}";
+            });
         }
 
         public SkillBind Bind

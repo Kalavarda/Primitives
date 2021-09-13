@@ -32,5 +32,12 @@ namespace Kalavarda.Primitives.Utils
         {
             return Math.Round(value, 2).ToString("### ### ###").Trim();
         }
+
+        public static string ToStr(this long value)
+        {
+            if (value < 1000)
+                return value.ToString();
+            return value.ToString("### ### ###").Trim();
+        }
     }
 }

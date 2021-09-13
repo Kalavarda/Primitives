@@ -1,4 +1,5 @@
-﻿using Kalavarda.Primitives.Process;
+﻿using System;
+using Kalavarda.Primitives.Process;
 
 namespace Kalavarda.Primitives.Skills
 {
@@ -16,5 +17,14 @@ namespace Kalavarda.Primitives.Skills
     public interface IHasKey
     {
         string Key { get; }
+    }
+
+    public interface IHasCount<T> where T: struct
+    {
+        T Count { get; }
+
+        T? Max { get; }
+
+        event Action<IHasCount<T>> CountChanged;
     }
 }

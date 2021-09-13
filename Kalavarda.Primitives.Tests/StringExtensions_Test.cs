@@ -16,5 +16,15 @@ namespace Kalavarda.Primitives.Tests
             var actual = value.ToStr();
             Assert.AreEqual(expected, actual);
         }
+
+        [TestCase(0, "0")]
+        [TestCase(1, "1")]
+        [TestCase(5, "5")]
+        [TestCase(-5, "-5")]
+        public void ToStr_Long_Test(long value, string expected)
+        {
+            var actual = value.ToStr();
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
