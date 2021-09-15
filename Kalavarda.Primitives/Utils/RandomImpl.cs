@@ -28,5 +28,10 @@ namespace Kalavarda.Primitives.Utils
         {
             return Rand.Next(min, max + 1);
         }
+
+        public bool Chance(int n)
+        {
+            return Rand.Next(n) == 0;
+        }
     }
 }
