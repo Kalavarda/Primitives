@@ -2,8 +2,14 @@
 {
     public interface IRandom
     {
+        /// <summary>
+        /// [0..1]
+        /// </summary>
         float Float();
 
+        /// <summary>
+        /// [0..1]
+        /// </summary>
         double Double();
 
         /// <summary>
