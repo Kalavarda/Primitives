@@ -78,7 +78,36 @@ namespace Kalavarda.Primitives.Visualization
         /// </summary>
         public View GetView(int angle)
         {
-            return Views.FirstOrDefault(); // TODO: implement this
+            if (Views == null || Views.Length == 0)
+                return null;
+
+            View nearestView = null;
+            var minAngle = 360;
+            foreach (var view in Views)
+            {
+                var a = GetAngle(angle, view.Angle);
+                if (a < minAngle)
+                {
+                    nearestView = view;
+                    minAngle = a;
+                }
+            }
+
+            return nearestView;
+        }
+
+        private static int GetAngle(int angle1, int angle2)
+        {
+            var a = Math.Abs(angle2 - angle1);
+            if (a <= 180)
+                return a;
+
+            if (angle1 < angle2)
+                angle1 += 360;
+            else
+                angle2 += 360;
+            
+            return Math.Abs(angle2 - angle1);
         }
     }
 }
