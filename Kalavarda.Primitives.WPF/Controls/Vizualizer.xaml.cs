@@ -13,34 +13,34 @@ namespace Kalavarda.Primitives.WPF.Controls
     public partial class Vizualizer
     {
         private int _nextFrameNumber;
-        private VisualData _visualData;
+        private VisualObject _visualObject;
         private DispatcherTimer _timer;
         private MediaPlayer _mediaPlayer;
 
-        public VisualData VisualData
+        public VisualObject VisualObject
         {
-            get => _visualData;
+            get => _visualObject;
             set
             {
-                if (_visualData == value)
+                if (_visualObject == value)
                     return;
 
-                if (_visualData != null)
+                if (_visualObject != null)
                 {
-                    _visualData.StateChanged -= VisualData_Changed;
-                    _visualData.AngleChanged -= VisualData_Changed;
+                    _visualObject.StateChanged -= VisualObjectChanged;
+                    _visualObject.AngleChanged -= VisualObjectChanged;
                     
                     _timer.Tick -= Timer_Tick;
                     _timer.Stop();
                     _timer = null;
                 }
 
-                _visualData = value;
+                _visualObject = value;
 
-                if (_visualData != null)
+                if (_visualObject != null)
                 {
-                    _visualData.StateChanged += VisualData_Changed;
-                    _visualData.AngleChanged += VisualData_Changed;
+                    _visualObject.StateChanged += VisualObjectChanged;
+                    _visualObject.AngleChanged += VisualObjectChanged;
 
                     _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
                     _timer.Tick += Timer_Tick;
@@ -56,7 +56,7 @@ namespace Kalavarda.Primitives.WPF.Controls
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            var state = _visualData?.State;
+            var state = _visualObject?.CurrentState;
             if (state == null)
                 return;
 
@@ -77,7 +77,7 @@ namespace Kalavarda.Primitives.WPF.Controls
             }
         }
 
-        private void VisualData_Changed(VisualData data)
+        private void VisualObjectChanged(VisualObject @object)
         {
             _nextFrameNumber = 0;
 
@@ -104,7 +104,7 @@ namespace Kalavarda.Primitives.WPF.Controls
 
         private void PlaySound()
         {
-            var state = _visualData?.State;
+            var state = _visualObject?.CurrentState;
 
             if (state?.Sound == null)
                 return;
@@ -121,7 +121,7 @@ namespace Kalavarda.Primitives.WPF.Controls
 
         private void MediaPlayer_MediaEnded(object sender, EventArgs e)
         {
-            var state = _visualData?.State;
+            var state = _visualObject?.CurrentState;
             if (state != null && state.Looping)
                 PlaySound();
         }
@@ -147,7 +147,7 @@ namespace Kalavarda.Primitives.WPF.Controls
 
         private View GetView()
         {
-            return _visualData?.State?.GetView(_visualData.Angle);
+            return _visualObject?.CurrentState?.GetView(_visualObject.CurrentAngle);
         }
 
         public Vizualizer()

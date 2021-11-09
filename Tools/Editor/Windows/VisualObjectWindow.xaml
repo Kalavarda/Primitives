@@ -1,0 +1,16 @@
+﻿<Window x:Class="Editor.Windows.VisualObjectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="VisualObject" Height="350" Width="500"
+        ShowInTaskbar="False" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="_tbId" IsReadOnly="True" Grid.Row="1"/>
+
+        <Button Content="Сохранить" Grid.Row="1" HorizontalAlignment="Right" Click="ButtonSave_OnClick"/>
+    </Grid>
+</Window>

@@ -2,3 +2,5 @@
 */obj
 /.vs
 *.user
+/Tools/Editor/bin
+/Tools/Editor/obj

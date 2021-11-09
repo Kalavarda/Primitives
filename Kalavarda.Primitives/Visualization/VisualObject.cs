@@ -5,22 +5,24 @@ using System.Text.Json.Serialization;
 
 namespace Kalavarda.Primitives.Visualization
 {
-    public class VisualData
+    public class VisualObject
     {
         private static readonly State[] NoStates = new State[0];
-        private State _state;
-        private int _angle;
+        private State _currentState;
+        private int _currentAngle;
+
+        public string Id { get; set; }
 
         /// <summary>
         /// Current state
         /// </summary>
         [JsonIgnore]
-        public State State
+        public State CurrentState
         {
-            get => _state;
+            get => _currentState;
             set
             {
-                if (_state == value)
+                if (_currentState == value)
                     return;
 
                 if (value != null)
@@ -29,22 +31,22 @@ namespace Kalavarda.Primitives.Visualization
                         throw new ArgumentException("Unknown state");
                 }
 
-                _state = value;
+                _currentState = value;
                 StateChanged?.Invoke(this);
             }
         }
 
         public State[] States { get; set; } = NoStates;
 
-        public event Action<VisualData> StateChanged;
+        public event Action<VisualObject> StateChanged;
 
         /// <summary>
         /// Current angle (degrees)
         /// </summary>
         [JsonIgnore]
-        public int Angle
+        public int CurrentAngle
         {
-            get => _angle;
+            get => _currentAngle;
             set
             {
                 var a = value;
@@ -53,15 +55,15 @@ namespace Kalavarda.Primitives.Visualization
                 while (a <= -180)
                     a += 360;
 
-                if (a == _angle)
+                if (a == _currentAngle)
                     return;
 
-                _angle = a;
+                _currentAngle = a;
                 AngleChanged?.Invoke(this);
             }
         }
 
-        public event Action<VisualData> AngleChanged;
+        public event Action<VisualObject> AngleChanged;
     }
 
     [DebuggerDisplay("{Name}")]
