@@ -72,6 +72,13 @@ namespace Kalavarda.Primitives.Visualization
         public string Name { get; set; }
 
         public View[] Views { get; set; } = NoViews;
+        
+        public StateSound Sound { get; set; }
+
+        /// <summary>
+        /// Зацикливать анимацию и звук
+        /// </summary>
+        public bool Looping { get; set; }
 
         /// <summary>
         /// Возвращает вид, который ближе всего к запрошенному углу поворота
@@ -109,5 +116,10 @@ namespace Kalavarda.Primitives.Visualization
             
             return Math.Abs(angle2 - angle1);
         }
+    }
+
+    public class StateSound
+    {
+        public byte[] RawData { get; set; }
     }
 }

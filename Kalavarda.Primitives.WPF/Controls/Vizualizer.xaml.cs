@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Kalavarda.Primitives.Visualization;
@@ -11,9 +12,10 @@ namespace Kalavarda.Primitives.WPF.Controls
 {
     public partial class Vizualizer
     {
-        private int _nextFrameNumber = 0;
+        private int _nextFrameNumber;
         private VisualData _visualData;
         private DispatcherTimer _timer;
+        private MediaPlayer _mediaPlayer;
 
         public VisualData VisualData
         {
@@ -42,7 +44,7 @@ namespace Kalavarda.Primitives.WPF.Controls
 
                     _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
                     _timer.Tick += Timer_Tick;
-                    _timer.Start();
+                    //_timer.Start();
                 }
                 else
                 {
@@ -54,6 +56,10 @@ namespace Kalavarda.Primitives.WPF.Controls
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            var state = _visualData?.State;
+            if (state == null)
+                return;
+
             var view = GetView();
             if (view == null)
                 return;
@@ -63,7 +69,12 @@ namespace Kalavarda.Primitives.WPF.Controls
             _nextFrameNumber++;
 
             if (_nextFrameNumber >= view.Frames.Length)
-                _nextFrameNumber = 0;
+            {
+                if (state.Looping)
+                    _nextFrameNumber = 0;
+                else
+                    _timer.Stop();
+            }
         }
 
         private void VisualData_Changed(VisualData data)
@@ -77,7 +88,42 @@ namespace Kalavarda.Primitives.WPF.Controls
                 return;
             }
 
-            _timer.Interval = TimeSpan.FromSeconds(view.DurationSec / view.Frames.Length);
+            if (view.Frames.Length > 1)
+            {
+                _timer.Interval = TimeSpan.FromSeconds(view.DurationSec / view.Frames.Length);
+                _timer.Start();
+            }
+            else
+            {
+                _timer.Stop();
+                ShowFrame(view);
+            }
+
+            PlaySound();
+        }
+
+        private void PlaySound()
+        {
+            var state = _visualData?.State;
+
+            if (state?.Sound == null)
+                return;
+
+            if (_mediaPlayer != null)
+                _mediaPlayer.MediaEnded -= MediaPlayer_MediaEnded;
+
+            _mediaPlayer = new MediaPlayer();
+            _mediaPlayer.Open(SoundUriFactory.Instance.GetUri(state.Sound));
+            if (state.Looping)
+                _mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;
+            _mediaPlayer.Play();
+        }
+
+        private void MediaPlayer_MediaEnded(object sender, EventArgs e)
+        {
+            var state = _visualData?.State;
+            if (state != null && state.Looping)
+                PlaySound();
         }
 
         private void ShowFrame(View view)
@@ -148,6 +194,34 @@ namespace Kalavarda.Primitives.WPF.Controls
             }
             image.Freeze();
             return image;
+        }
+    }
+
+    internal class SoundUriFactory
+    {
+        private readonly Dictionary<StateSound, Uri> _cache = new Dictionary<StateSound, Uri>();
+
+        public static SoundUriFactory Instance = new SoundUriFactory();
+        
+        private SoundUriFactory() { }
+
+        public Uri GetUri(StateSound sound)
+        {
+            if (sound?.RawData == null)
+                throw new ArgumentNullException(nameof(sound));
+
+            if (_cache.TryGetValue(sound, out var uri))
+                return uri;
+
+            // TODO: clear temporary files before application closing
+
+            var fileName = Path.GetTempFileName().Replace(".tmp", ".mp3");
+            using (var file = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
+                file.Write(sound.RawData);
+
+            uri = new Uri(fileName);
+            _cache.Add(sound, uri);
+            return uri;
         }
     }
 }
