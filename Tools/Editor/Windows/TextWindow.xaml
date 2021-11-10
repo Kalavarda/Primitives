@@ -1,0 +1,25 @@
+﻿<Window x:Class="Editor.Windows.TextWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TextWindow" Height="100" Width="400" WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTetBox}"/>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource DefaultTetBlock}"/>
+        <Style TargetType="Button" BasedOn="{StaticResource DefaultButton}"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBox x:Name="_tb"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="OK" IsDefault="True" Click="ButtonOk_OnClick"/>
+            <Button Content="Отмена" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

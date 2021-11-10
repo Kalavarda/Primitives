@@ -64,6 +64,33 @@ namespace Kalavarda.Primitives.Visualization
         }
 
         public event Action<VisualObject> AngleChanged;
+
+        public void Add(State state)
+        {
+            if (state == null) throw new ArgumentNullException(nameof(state));
+
+            if (States.Contains(state))
+                throw new Exception("State already exist");
+
+            if (string.IsNullOrWhiteSpace(state.Name))
+                throw new Exception("Name is empty");
+
+            var list = States.ToList();
+            list.Add(state);
+            States = list.ToArray();
+        }
+
+        public void Remove(State state)
+        {
+            if (state == null) throw new ArgumentNullException(nameof(state));
+
+            if (!States.Contains(state))
+                throw new Exception("State not extst");
+
+            var list = States.ToList();
+            list.Remove(state);
+            States = list.ToArray();
+        }
     }
 
     [DebuggerDisplay("{Name}")]
@@ -117,6 +144,33 @@ namespace Kalavarda.Primitives.Visualization
                 angle2 += 360;
             
             return Math.Abs(angle2 - angle1);
+        }
+
+        public void Add(View view)
+        {
+            if (view == null) throw new ArgumentNullException(nameof(view));
+
+            if (Views.Contains(view))
+                throw new ArgumentException("View already exist");
+
+            if (Views.Any(v => v.Angle == view.Angle))
+                throw new ArgumentException("This angle already exist");
+
+            var list = Views.ToList();
+            list.Add(view);
+            Views = list.ToArray();
+        }
+
+        public void Remove(View view)
+        {
+            if (view == null) throw new ArgumentNullException(nameof(view));
+
+            if (!Views.Contains(view))
+                throw new ArgumentException("View not found");
+
+            var list = Views.ToList();
+            list.Remove(view);
+            Views = list.ToArray();
         }
     }
 

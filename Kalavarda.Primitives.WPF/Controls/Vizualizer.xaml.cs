@@ -44,7 +44,7 @@ namespace Kalavarda.Primitives.WPF.Controls
 
                     _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
                     _timer.Tick += Timer_Tick;
-                    //_timer.Start();
+                    VisualObjectChanged(_visualObject);
                 }
                 else
                 {
@@ -82,7 +82,7 @@ namespace Kalavarda.Primitives.WPF.Controls
             _nextFrameNumber = 0;
 
             var view = GetView();
-            if (view == null)
+            if (view?.Frames == null)
             {
                 _image.Visibility = Visibility.Collapsed;
                 return;

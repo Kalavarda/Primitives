@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Editor
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public partial class App 
     {
+        public static void ShowError(Exception error)
+        {
+            MessageBox.Show(error.GetBaseException().Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }

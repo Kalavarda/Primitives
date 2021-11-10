@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using Editor.Windows;
@@ -34,10 +35,14 @@ namespace Editor
             if (openDialog.ShowDialog() != true)
                 return;
 
+            var start = DateTime.Now;
             var serializer = new BinarySerializer();
             using var file = new FileStream(openDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            Debug.WriteLine($"______ File opened (sec.): {(DateTime.Now - start).TotalSeconds}");
             var visualObject = serializer.Deserialize(file);
+            Debug.WriteLine($"______ Deserialized (sec.): {(DateTime.Now - start).TotalSeconds}");
             var window = new VisualObjectWindow(visualObject, openDialog.FileName) { Owner = this };
+            Debug.WriteLine($"______ Window created (sec.): {(DateTime.Now - start).TotalSeconds}");
             window.Show();
         }
     }
