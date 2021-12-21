@@ -50,10 +50,13 @@
             </GroupBox>
 
             <GroupBox Header="Звук" Grid.Row="2">
-                <WrapPanel>
-                    <Button Content="Загрузить..." Click="ButtonSoundLoad_OnClick"/>
-                    <Button x:Name="_btnSoundClear" Content="Очистить" Click="ButtonSoundClear_OnClick"/>
-                </WrapPanel>
+                <StackPanel>
+                    <Slider x:Name="_sliderVolume" Margin="5" Minimum="0" Maximum="1" TickFrequency="0.1" SmallChange="0.1" LargeChange="0.5" ValueChanged="_sliderVolume_OnValueChanged"/>
+                    <WrapPanel>
+                        <Button Content="Загрузить..." Click="ButtonSoundLoad_OnClick"/>
+                        <Button x:Name="_btnSoundClear" Content="Очистить" Click="ButtonSoundClear_OnClick"/>
+                    </WrapPanel>
+                </StackPanel>
             </GroupBox>
         </Grid>
 

@@ -13,11 +13,12 @@ namespace Kalavarda.Primitives.WPF.Controls
     public partial class Vizualizer
     {
         private int _nextFrameNumber;
-        private VisualObject _visualObject;
+        private IVisualObject _visualObject;
         private DispatcherTimer _timer;
         private MediaPlayer _mediaPlayer;
+        private double _volume;
 
-        public VisualObject VisualObject
+        public IVisualObject VisualObject
         {
             get => _visualObject;
             set
@@ -54,6 +55,21 @@ namespace Kalavarda.Primitives.WPF.Controls
             }
         }
 
+        /// <summary>
+        /// 0..1
+        /// </summary>
+        public double Volume
+        {
+            get => _volume;
+            set
+            {
+                _volume = value;
+
+                if (_mediaPlayer != null)
+                    _mediaPlayer.Volume = value;
+            }
+        }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
             var state = _visualObject?.CurrentState;
@@ -77,7 +93,7 @@ namespace Kalavarda.Primitives.WPF.Controls
             }
         }
 
-        private void VisualObjectChanged(VisualObject @object)
+        private void VisualObjectChanged(IReadonlyVisualObject @object)
         {
             _nextFrameNumber = 0;
 
@@ -112,7 +128,7 @@ namespace Kalavarda.Primitives.WPF.Controls
             if (_mediaPlayer != null)
                 _mediaPlayer.MediaEnded -= MediaPlayer_MediaEnded;
 
-            _mediaPlayer = new MediaPlayer();
+            _mediaPlayer = new MediaPlayer { Volume = Volume };
             _mediaPlayer.Open(SoundUriFactory.Instance.GetUri(state.Sound));
             if (state.Looping)
                 _mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;

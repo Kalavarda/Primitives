@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -19,6 +20,8 @@ namespace Editor.Windows
         public StateWindow()
         {
             InitializeComponent();
+
+            _sliderVolume.Value = Settings.Default.Volume;
         }
 
         public StateWindow(VisualObject visualObject, State state): this()
@@ -194,6 +197,20 @@ namespace Editor.Windows
         private void ListBoxViews_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             TuneControls(false);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _vizualizer.VisualObject = null;
+
+            base.OnClosing(e);
+        }
+
+        private void _sliderVolume_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            _vizualizer.Volume = _sliderVolume.Value;
+            Settings.Default.Volume = _sliderVolume.Value;
+            Settings.Default.Save();
         }
     }
 }

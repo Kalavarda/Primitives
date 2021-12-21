@@ -5,7 +5,39 @@ using System.Text.Json.Serialization;
 
 namespace Kalavarda.Primitives.Visualization
 {
-    public class VisualObject
+    public interface IReadonlyVisualObject
+    {
+        /// <summary>
+        /// Current state
+        /// </summary>
+        public State CurrentState { get; }
+
+        State[] States { get; }
+
+        event Action<VisualObject> StateChanged;
+
+        /// <summary>
+        /// Current angle (degrees)
+        /// </summary>
+        int CurrentAngle { get; }
+
+        event Action<VisualObject> AngleChanged;
+    }
+
+    public interface IVisualObject: IReadonlyVisualObject
+    {
+        /// <summary>
+        /// Current state
+        /// </summary>
+        new State CurrentState { get; set; }
+
+        /// <summary>
+        /// Current angle (degrees)
+        /// </summary>
+        new int CurrentAngle { get; set; }
+    }
+
+    public class VisualObject : IVisualObject
     {
         private static readonly State[] NoStates = new State[0];
         private State _currentState;
@@ -13,9 +45,7 @@ namespace Kalavarda.Primitives.Visualization
 
         public string Id { get; set; }
 
-        /// <summary>
-        /// Current state
-        /// </summary>
+        /// <inheritdoc/>
         [JsonIgnore]
         public State CurrentState
         {
@@ -40,9 +70,7 @@ namespace Kalavarda.Primitives.Visualization
 
         public event Action<VisualObject> StateChanged;
 
-        /// <summary>
-        /// Current angle (degrees)
-        /// </summary>
+        /// <inheritdoc/>
         [JsonIgnore]
         public int CurrentAngle
         {
