@@ -53,7 +53,7 @@ namespace Kalavarda.Primitives.Tests.Visualization
             var data = stream1.ToArray();
             
             using var stream2 = new MemoryStream(data);
-            var result = serializer.Deserialize(stream2);
+            var result = serializer.Deserialize<VisualObject>(stream2);
 
             Assert.AreEqual(obj.Id, result.Id);
             Assert.AreEqual(default(int), result.CurrentAngle);

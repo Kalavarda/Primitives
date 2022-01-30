@@ -5,9 +5,9 @@ namespace Kalavarda.Primitives.Visualization
 {
     public interface IBinarySerializer
     {
-        void Serialize(VisualObject visualObject, Stream stream);
+        void Serialize<T>(T obj, Stream stream);
 
-        VisualObject Deserialize(Stream stream);
+        T Deserialize<T>(Stream stream);
     }
 
     public class BinarySerializer : IBinarySerializer
@@ -27,7 +27,18 @@ namespace Kalavarda.Primitives.Visualization
                 Serialize(visualObject.States[i], writer);
         }
 
-        public VisualObject Deserialize(Stream stream)
+        public void Serialize<T>(T obj, Stream stream)
+        {
+            if (typeof(T) == typeof(VisualObject))
+            {
+                Serialize<VisualObject>((VisualObject)(object)obj, stream);
+                return;
+            }
+
+            throw new NotImplementedException();
+        }
+
+        public VisualObject DeserializeVisualObject(Stream stream)
         {
             if (stream == null) throw new ArgumentNullException(nameof(stream));
 
@@ -39,6 +50,14 @@ namespace Kalavarda.Primitives.Visualization
                 result.States[i] = DeserializeState(reader);
 
             return result;
+        }
+
+        public T Deserialize<T>(Stream stream)
+        {
+            if (typeof(T) == typeof(VisualObject))
+                return (T)(object)DeserializeVisualObject(stream);
+
+            throw new NotImplementedException();
         }
 
         private static void Serialize(State state, BinaryWriter writer)

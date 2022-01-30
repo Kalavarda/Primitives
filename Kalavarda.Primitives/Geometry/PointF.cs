@@ -8,6 +8,8 @@ namespace Kalavarda.Primitives.Geometry
     {
         private const double MinDiff = 0.001;
 
+        public static readonly PointF Zero = new PointF();
+
         public float X { get; private set; }
 
         public float Y { get; private set; }

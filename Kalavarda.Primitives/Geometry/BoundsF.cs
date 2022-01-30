@@ -46,7 +46,9 @@ namespace Kalavarda.Primitives.Geometry
 
         public override bool DoesIntersect(float x, float y)
         {
-            throw new NotImplementedException();
+            var dx = x - Position.X;
+            var dy = y - Position.Y;
+            return MathF.Sqrt(dx * dx + dy * dy) <= Radius;
         }
 
         public override bool DoesIntersect(BoundsF b)
@@ -87,14 +89,37 @@ namespace Kalavarda.Primitives.Geometry
             return true;
         }
 
+        public float Left => Position.X - Size.Width / 2;
+
+        public float Right => Position.X + Size.Width / 2;
+
+        public float Top => Position.Y - Size.Height / 2;
+
+        public float Bottom => Position.Y + Size.Height / 2;
+
         public override bool DoesIntersect(BoundsF b)
         {
+            if (b == null) throw new ArgumentNullException(nameof(b));
+
+            if (b is RectBounds rect)
+            {
+                if (Left >= rect.Right)
+                    return false;
+                if (Right <= rect.Left)
+                    return false;
+                if (Top >= rect.Bottom)
+                    return false;
+                if (Bottom <= rect.Top)
+                    return false;
+                return true;
+            }
+
             throw new NotImplementedException();
         }
 
         public override BoundsF DeepClone()
         {
-            throw new NotImplementedException();
+            return new RectBounds(Position.DeepClone(), Size.DeepClone());
         }
 
         public RectBounds(PointF center, SizeF size) : base(center, size)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using Editor.Windows;
@@ -35,14 +34,34 @@ namespace Editor
             if (openDialog.ShowDialog() != true)
                 return;
 
-            var start = DateTime.Now;
-            var serializer = new BinarySerializer();
+            IBinarySerializer serializer = new BinarySerializer();
             using var file = new FileStream(openDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            Debug.WriteLine($"______ File opened (sec.): {(DateTime.Now - start).TotalSeconds}");
-            var visualObject = serializer.Deserialize(file);
-            Debug.WriteLine($"______ Deserialized (sec.): {(DateTime.Now - start).TotalSeconds}");
+            var visualObject = serializer.Deserialize<VisualObject>(file);
             var window = new VisualObjectWindow(visualObject, openDialog.FileName) { Owner = this };
-            Debug.WriteLine($"______ Window created (sec.): {(DateTime.Now - start).TotalSeconds}");
+            window.Show();
+        }
+
+        private void Scene_New_OnClick(object sender, RoutedEventArgs e)
+        {
+            var scene = new Scene();
+            var window = new SceneWindow(scene) { Owner = this };
+            window.Show();
+        }
+
+        private void Scene_Open_OnClick(object sender, RoutedEventArgs e)
+        {
+            var openDialog = new OpenFileDialog
+            {
+                DefaultExt = SceneWindow.DefaultExt,
+                Filter = SceneWindow.Filter
+            };
+            if (openDialog.ShowDialog() != true)
+                return;
+
+            IBinarySerializer serializer = new BinarySerializer();
+            using var file = new FileStream(openDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var scene = serializer.Deserialize<Scene>(file);
+            var window = new SceneWindow(scene, openDialog.FileName) { Owner = this };
             window.Show();
         }
     }

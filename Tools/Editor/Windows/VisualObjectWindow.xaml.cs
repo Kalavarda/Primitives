@@ -12,7 +12,7 @@ namespace Editor.Windows
     public partial class VisualObjectWindow
     {
         internal const string DefaultExt = ".viz";
-        internal const string Filter = "Visual objects|*.viz|All files|*.*";
+        internal const string Filter = "Visual objects|"+ DefaultExt + "|All files|*.*";
 
         private readonly VisualObject _visualObject;
         private string _fileName;
@@ -53,7 +53,7 @@ namespace Editor.Windows
                 _fileName = saveDialog.FileName;
             }
 
-            var serializer = new BinarySerializer();
+            IBinarySerializer serializer = new BinarySerializer();
             using var file = new FileStream(_fileName, FileMode.Create, FileAccess.Write, FileShare.None);
                 serializer.Serialize(_visualObject, file);
 
