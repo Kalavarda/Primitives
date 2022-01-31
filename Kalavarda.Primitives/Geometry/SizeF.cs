@@ -23,5 +23,11 @@ namespace Kalavarda.Primitives.Geometry
         {
             return new SizeF(Width, Height);
         }
+
+        public void Set(float width, float height)
+        {
+            Width = width;
+            Height = height;
+        }
     }
 }
