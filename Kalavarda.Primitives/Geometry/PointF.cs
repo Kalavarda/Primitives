@@ -6,7 +6,7 @@ namespace Kalavarda.Primitives.Geometry
     [DebuggerDisplay("{X}; {Y}")]
     public class PointF
     {
-        private const double MinDiff = 0.001;
+        internal const double MinDiff = 0.0001;
 
         public static readonly PointF Zero = new PointF();
 
