@@ -33,9 +33,20 @@ namespace Kalavarda.Primitives.Geometry
             return MathF.Sqrt(dx * dx + dy * dy);
         }
 
+        /// <summary>
+        /// В радианах
+        /// </summary>
         public float AngleTo(PointF p)
         {
             return MathF.Atan2(p.Y - Y, p.X - X);
+        }
+
+        /// <summary>
+        /// В радианах
+        /// </summary>
+        public float AngleTo(float toX, float toY)
+        {
+            return MathF.Atan2(toY - Y, toX - X);
         }
 
         public float DistanceTo(BoundsF bounds)
