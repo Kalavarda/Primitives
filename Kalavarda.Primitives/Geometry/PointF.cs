@@ -85,7 +85,7 @@ namespace Kalavarda.Primitives.Geometry
         }
 
         /// <summary>
-        /// Находит точку на прямой до точки <see cref="target"/>, на расстоянии расстояние <see cref="distance"/>
+        /// Находит точку на прямой до точки <see cref="target"/>, на расстоянии <see cref="distance"/> от текущей
         /// </summary>
         public PointF GetPointAtLineTo(PointF target, float distance)
         {

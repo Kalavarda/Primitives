@@ -7,11 +7,16 @@ namespace Kalavarda.Primitives.Skills
     {
         string Name { get; }
 
-        float MaxDistance { get; }
-
         ITimeLimiter TimeLimiter { get; }
 
         IProcess Use(ISkilled initializer);
+    }
+
+    public interface IDistanceSkill
+    {
+        float MinDistance { get; }
+
+        float MaxDistance { get; }
     }
 
     public interface IHasKey
