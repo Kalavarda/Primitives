@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace Kalavarda.Primitives.Geometry
 {
@@ -112,6 +113,22 @@ namespace Kalavarda.Primitives.Geometry
                 return MathF.Abs(p.X - X) < MinDiff && MathF.Abs(p.Y - Y) < MinDiff;
 
             return base.Equals(obj);
+        }
+
+        public void Offset(float dx, float dy)
+        {
+            Set(X + dx, Y + dy);
+        }
+
+        public void Serialize(BinaryWriter writer)
+        {
+            writer.Write(X);
+            writer.Write(Y);
+        }
+
+        public static PointF Deserialize(BinaryReader reader)
+        {
+            return new PointF(reader.ReadSingle(), reader.ReadSingle());
         }
     }
 }

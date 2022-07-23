@@ -1,10 +1,11 @@
 ﻿using Kalavarda.Primitives.Abstract;
 using Kalavarda.Primitives.Geometry;
 using Kalavarda.Primitives.Skills;
+using Kalavarda.Primitives.Sound;
 
 namespace Kalavarda.Primitives.Units
 {
-    public abstract class Unit : IMapObject, ISkilled, ICreature
+    public abstract class Unit : IMapObject, ISkilled, ICreature, IMakeSounds
     {
         public static readonly TimeSpan GlobalCooldown = TimeSpan.FromSeconds(0.5);
         private Unit _target;
@@ -75,5 +76,12 @@ namespace Kalavarda.Primitives.Units
         }
 
         public event Action<Unit> IsSelectedChanged;
+
+        public event Action<string> PlaySound;
+
+        public void DoPlaySound(string soundKey)
+        {
+            PlaySound?.Invoke(soundKey);
+        }
     }
 }
