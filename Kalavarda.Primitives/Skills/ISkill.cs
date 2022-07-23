@@ -9,7 +9,7 @@ namespace Kalavarda.Primitives.Skills
 
         ITimeLimiter TimeLimiter { get; }
 
-        IProcess Use(ISkilled initializer);
+        IProcess Use();
     }
 
     public interface IDistanceSkill

@@ -1,9 +1,7 @@
-﻿using Kalavarda.Primitives;
-using Kalavarda.Primitives.Process;
+﻿using Kalavarda.Primitives.Process;
 using Kalavarda.Primitives.Skills;
-using Kalavarda.Primitives.Units;
 
-namespace OpenWorld.Models.Mobs
+namespace Kalavarda.Primitives.Units
 {
     public class MobFightProcess: IProcess
     {
@@ -37,7 +35,7 @@ namespace OpenWorld.Models.Mobs
                         if (distanceSkill.MaxDistance < distance)
                             continue;
 
-                    var skillProcess = skill.Use(_mob);
+                    var skillProcess = skill.Use();
                     skillFound = true;
                     if (skillProcess != null)
                         _processor.Add(skillProcess);
@@ -51,6 +49,11 @@ namespace OpenWorld.Models.Mobs
 
         private void MoveToTarget(TimeSpan delta)
         {
+            var distance = _mob.Position.DistanceTo(_mob.Target.Position);
+            var nearestSkill = _mob.Skills.OfType<IDistanceSkill>().Min(sk => sk.MaxDistance);
+            if (distance < nearestSkill)
+                return;
+
             var angle = _mob.Position.AngleTo(_mob.Target.Position);
             var d = _mob.MoveSpeed.Max * (float)delta.TotalSeconds;
             var dx = d * MathF.Cos(angle);

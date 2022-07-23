@@ -53,12 +53,13 @@ namespace Kalavarda.Primitives.Units
                 if (_target == value)
                     return;
 
+                var oldValue = _target;
                 _target = value;
-                TargetChanged?.Invoke();
+                TargetChanged?.Invoke(oldValue, value);
             }
         }
 
-        public event Action TargetChanged;
+        public event Action<Unit, Unit> TargetChanged;
 
         public abstract IEnumerable<ISkill> Skills { get; }
 
@@ -79,7 +80,7 @@ namespace Kalavarda.Primitives.Units
 
         public event Action<string> PlaySound;
 
-        public void DoPlaySound(string soundKey)
+        protected void RaisePlaySound(string soundKey)
         {
             PlaySound?.Invoke(soundKey);
         }
