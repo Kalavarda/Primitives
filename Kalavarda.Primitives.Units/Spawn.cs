@@ -17,7 +17,7 @@ namespace Kalavarda.Primitives.Units
 
         public DateTime LastUnitDied { get; private set; } = DateTime.MinValue;
 
-        public TimeSpan PeriodAfterDeath { get; } = TimeSpan.FromSeconds(3);
+        public TimeSpan PeriodAfterDeath { get; } = TimeSpan.FromSeconds(12);
 
         private readonly TimeLimiter _timeLimiter = new(TimeSpan.FromSeconds(1));
 
