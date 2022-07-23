@@ -27,9 +27,26 @@ namespace Kalavarda.Primitives.Units
         {
             _objects.Add(obj);
             ObjectAdded?.Invoke(obj);
+
+            if (obj is Unit unit)
+                unit.Disposing += Unit_Disposing;
+        }
+
+        private void Unit_Disposing(Unit unit)
+        {
+            Remove(unit);
+            unit.Disposing -= Unit_Disposing;
+        }
+
+        public void Remove(IMapObject obj)
+        {
+            _objects.Remove(obj);
+            ObjectRemoved?.Invoke(obj);
         }
 
         public event Action<IMapObject> ObjectAdded;
+
+        public event Action<IMapObject> ObjectRemoved;
 
         public bool IsHidden { get; set; }
     }

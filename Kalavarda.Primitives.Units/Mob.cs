@@ -26,10 +26,15 @@ namespace Kalavarda.Primitives.Units
                 if (_state == value)
                     return;
 
+                var oldValue = _state;
                 _state = value;
                 StateChangedTime = DateTime.Now;
+
+                StateChanged?.Invoke(this, oldValue, value);
             }
         }
+
+        public event Action<Mob, MobState, MobState> StateChanged;
 
         public DateTime StateChangedTime { get; private set; } = DateTime.Now;
 
@@ -54,7 +59,8 @@ namespace Kalavarda.Primitives.Units
             Idle,
             Fight,
             Dead,
-            Returning
+            Returning,
+            Removing
         }
 
         public static void Remove(Mob mob)

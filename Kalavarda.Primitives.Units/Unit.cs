@@ -5,7 +5,7 @@ using Kalavarda.Primitives.Sound;
 
 namespace Kalavarda.Primitives.Units
 {
-    public abstract class Unit : IMapObject, ISkilled, ICreature, IMakeSounds
+    public abstract class Unit : IMapObject, ISkilled, ICreature, IMakeSounds, IDisposable
     {
         public static readonly TimeSpan GlobalCooldown = TimeSpan.FromSeconds(0.5);
         private Unit _target;
@@ -83,6 +83,13 @@ namespace Kalavarda.Primitives.Units
         protected void RaisePlaySound(string soundKey)
         {
             PlaySound?.Invoke(soundKey);
+        }
+
+        public event Action<Unit> Disposing;
+
+        public void Dispose()
+        {
+            Disposing?.Invoke(this);
         }
     }
 }

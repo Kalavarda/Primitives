@@ -5,16 +5,20 @@ namespace Kalavarda.Primitives.Units
     public class SoundController: IDisposable
     {
         private readonly Map _map;
+        private readonly IMakeSounds _hero;
         private readonly ISoundPlayer _soundPlayer;
 
-        public SoundController(Map map, ISoundPlayer soundPlayer)
+        public SoundController(Map map, IMakeSounds hero, ISoundPlayer soundPlayer)
         {
             _map = map ?? throw new ArgumentNullException(nameof(map));
+            _hero = hero ?? throw new ArgumentNullException(nameof(hero));
             _soundPlayer = soundPlayer ?? throw new ArgumentNullException(nameof(soundPlayer));
 
             map.LayerAdded += Map_LayerAdded;
             foreach (var mapLayer in map.Layers)
                 Map_LayerAdded(mapLayer);
+
+            _hero.PlaySound += OnPlaySound;
         }
 
         private void Map_LayerAdded(MapLayer mapLayer)
@@ -48,6 +52,8 @@ namespace Kalavarda.Primitives.Units
                     if (obj is IMakeSounds makeSounds)
                         makeSounds.PlaySound -= OnPlaySound;
             }
+
+            _hero.PlaySound -= OnPlaySound;
         }
     }
 }
