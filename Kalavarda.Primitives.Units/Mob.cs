@@ -1,13 +1,22 @@
-﻿using Kalavarda.Primitives.Process;
+﻿using System.Collections.Immutable;
+using Kalavarda.Primitives.Process;
 
 namespace Kalavarda.Primitives.Units
 {
     public abstract class Mob : Unit
     {
         private static readonly ICollection<Mob> _mobs = new List<Mob>();
+
         private MobState _state = MobState.New;
 
-        public static IEnumerable<Mob> Mobs => _mobs;
+        public static IReadOnlyCollection<Mob> Mobs
+        {
+            get
+            {
+                lock(_mobs)
+                    return _mobs.ToImmutableArray();
+            }
+        }
 
         public MobState State
         {
@@ -34,7 +43,8 @@ namespace Kalavarda.Primitives.Units
 
         protected Mob(RangeF moveSpeed, Spawn spawn) : base(moveSpeed)
         {
-            _mobs.Add(this);
+            lock(_mobs)
+                _mobs.Add(this);
             Spawn = spawn;
         }
 
@@ -49,7 +59,8 @@ namespace Kalavarda.Primitives.Units
 
         public static void Remove(Mob mob)
         {
-            _mobs.Remove(mob);
+            lock (_mobs)
+                _mobs.Remove(mob);
         }
     }
 }
