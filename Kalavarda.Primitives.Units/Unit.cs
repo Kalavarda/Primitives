@@ -99,6 +99,12 @@ namespace Kalavarda.Primitives.Units
 
         public event Action<Unit> Disposing;
 
+        public static void Apply(Unit from, UnitChanges changes, Unit to)
+        {
+            to.HP.Value += changes.HP;
+        }
+
+
         public void Dispose()
         {
             Disposing?.Invoke(this);
