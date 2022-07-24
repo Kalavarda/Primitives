@@ -11,6 +11,10 @@ namespace Kalavarda.Primitives.Units
         private Unit _target;
         private bool _isSelected;
 
+        private static uint _counter;
+
+        public uint Id { get; }
+
         public AngleF MoveDirection { get; } = new();
 
         public RangeF MoveSpeed { get; }
@@ -24,6 +28,8 @@ namespace Kalavarda.Primitives.Units
 
         protected Unit(RangeF moveSpeed)
         {
+            Id = _counter++;
+
             MoveSpeed = moveSpeed;
             HP.ValueMin += HP_ValueMin;
         }
@@ -101,9 +107,13 @@ namespace Kalavarda.Primitives.Units
 
         public static void Apply(Unit from, UnitChanges changes, Unit to)
         {
+            var oldHp = to.HP.Value;
             to.HP.Value += changes.HP;
+            if (to.HP.Value < oldHp)
+                to.NegativeSkillReceived?.Invoke(from, to);
         }
 
+        public event Action<Unit, Unit> NegativeSkillReceived;
 
         public void Dispose()
         {
