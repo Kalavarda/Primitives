@@ -25,6 +25,12 @@ namespace Kalavarda.Primitives.Units
                 return;
             }
 
+            if (_mob.Target == null)
+            {
+                Stop();
+                return;
+            }
+
             var skillFound = false;
             _attackLimiter.Do(() =>
             {
@@ -49,6 +55,9 @@ namespace Kalavarda.Primitives.Units
 
         private void MoveToTarget(TimeSpan delta)
         {
+            //if (_mob.Target == null)
+            //    return;
+
             var distance = _mob.Position.DistanceTo(_mob.Target.Position);
             var nearestSkill = _mob.Skills.OfType<IDistanceSkill>().Min(sk => sk.MaxDistance);
             if (distance < nearestSkill)
