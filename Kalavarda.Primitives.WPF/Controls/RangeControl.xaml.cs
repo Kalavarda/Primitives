@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Windows;
+using System.Windows.Media;
 using Kalavarda.Primitives.Utils;
 
 namespace Kalavarda.Primitives.WPF.Controls
@@ -34,12 +35,15 @@ namespace Kalavarda.Primitives.WPF.Controls
             }
         }
 
+        public bool ShowText { get; set; } = true;
+
         private void OnChanged(RangeF range)
         {
             this.Do(() =>
             {
                 _front.Width = ActualWidth * range.ValueN;
                 _tb.Text = range.Value.ToStr() + " / " + (range.Max - range.Min).ToStr();
+                _tb.Visibility = ShowText ? Visibility.Visible : Visibility.Collapsed;
             });
         }
 

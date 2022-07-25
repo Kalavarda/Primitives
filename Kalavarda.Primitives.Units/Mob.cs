@@ -1,13 +1,15 @@
 ﻿using System.Collections.Immutable;
+using Kalavarda.Primitives.Abstract;
 using Kalavarda.Primitives.Process;
 
 namespace Kalavarda.Primitives.Units
 {
-    public abstract class Mob : Unit
+    public abstract class Mob : Unit, IHasLevel
     {
         private static readonly ICollection<Mob> _mobs = new List<Mob>();
 
         private MobState _state = MobState.New;
+        private ushort _level;
 
         public static IReadOnlyCollection<Mob> Mobs
         {
@@ -68,5 +70,20 @@ namespace Kalavarda.Primitives.Units
             lock (_mobs)
                 _mobs.Remove(mob);
         }
+
+        public ushort Level
+        {
+            get => _level;
+            set
+            {
+                if (_level == value)
+                    return;
+
+                _level = value;
+                LevelChanged?.Invoke(this);
+            }
+        }
+
+        public event Action<IHasLevel> LevelChanged;
     }
 }
