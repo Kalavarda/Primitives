@@ -1,5 +1,5 @@
 ﻿using System.Timers;
-using Kalavarda.Primitives.Abstract;
+using Kalavarda.Primitives.Units.Interfaces;
 using Timer = System.Timers.Timer;
 
 namespace Kalavarda.Primitives.Units.Fight
@@ -17,7 +17,7 @@ namespace Kalavarda.Primitives.Units.Fight
     {
         private readonly TimeSpan FightExitDuration = TimeSpan.FromSeconds(5);
 
-        private readonly Map _map;
+        private readonly ISkillReceiver _skillReceiveAggregator;
         private readonly Unit _hero;
         private DateTime _lastNegativeReceivedTime = DateTime.MinValue;
         private readonly Timer _timer = new(TimeSpan.FromSeconds(1).TotalMilliseconds) { AutoReset = true };
@@ -48,16 +48,13 @@ namespace Kalavarda.Primitives.Units.Fight
 
         public event Action CurrentFightChanged;
 
-        public FightController(Map map, Unit hero)
+        public FightController(ISkillReceiver skillReceiveAggregator, Unit hero)
         {
-            _map = map;
+            _skillReceiveAggregator = skillReceiveAggregator ?? throw new ArgumentNullException(nameof(skillReceiveAggregator));
             _hero = hero;
 
             _hero.NegativeSkillReceived += NegativeSkillReceived;
-
-            _map.LayerAdded += Map_LayerAdded;
-            foreach (var layer in map.Layers)
-                Map_LayerAdded(layer);
+            _skillReceiveAggregator.NegativeSkillReceived += NegativeSkillReceived;
 
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
@@ -68,27 +65,6 @@ namespace Kalavarda.Primitives.Units.Fight
             if (CurrentFight != null)
                 if (DateTime.Now - _lastNegativeReceivedTime > FightExitDuration)
                     CurrentFight = null;
-        }
-
-        private void Map_LayerAdded(MapLayer mapLayer)
-        {
-            mapLayer.ObjectAdded += MapLayer_ObjectAdded;
-            foreach (var mapObject in mapLayer.Objects)
-                MapLayer_ObjectAdded(mapObject);
-        }
-
-        private void MapLayer_ObjectAdded(IMapObject mapObject)
-        {
-            if (mapObject is Unit unit)
-            {
-                unit.NegativeSkillReceived += NegativeSkillReceived;
-                unit.Disposing += Unit_Disposing;
-            }
-        }
-
-        private void Unit_Disposing(Unit unit)
-        {
-            unit.NegativeSkillReceived -= NegativeSkillReceived;
         }
 
         private void NegativeSkillReceived(Unit fromUnit, Unit toUnit)
@@ -112,15 +88,7 @@ namespace Kalavarda.Primitives.Units.Fight
             _timer.Stop();
             _timer.Dispose();
 
-            foreach (var layer in _map.Layers)
-            {
-                layer.ObjectAdded -= MapLayer_ObjectAdded;
-                foreach (var mapObject in layer.Objects)
-                    if (mapObject is Unit unit)
-                        unit.NegativeSkillReceived -= NegativeSkillReceived;
-            }
-
-            _map.LayerAdded -= Map_LayerAdded;
+            _skillReceiveAggregator.NegativeSkillReceived -= NegativeSkillReceived;
             _hero.NegativeSkillReceived -= NegativeSkillReceived;
         }
     }

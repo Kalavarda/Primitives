@@ -6,7 +6,7 @@ using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
-    public abstract class Unit : IMapObject, ISkilled, ICreature, IMakeSounds, IDisposable
+    public abstract class Unit : IMapObject, ISkilled, ICreature, IMakeSounds, IDisposable, ISkillReceiver
     {
         public static readonly TimeSpan GlobalCooldown = TimeSpan.FromSeconds(0.5);
         private Unit _target;
