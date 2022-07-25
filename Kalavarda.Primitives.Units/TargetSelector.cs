@@ -5,7 +5,7 @@ namespace Kalavarda.Primitives.Units
 {
     public interface ITargetSelector
     {
-        Unit Select();
+        Unit Select(bool fightersOnly = false);
     }
 
     public class TargetSelector : ITargetSelector
@@ -26,7 +26,7 @@ namespace Kalavarda.Primitives.Units
             MaxSelectionDistance = maxSelectionDistance;
         }
 
-        public Unit Select()
+        public Unit Select(bool fightersOnly)
         {
             var dict = new Dictionary<Unit, float>();
 
@@ -42,6 +42,16 @@ namespace Kalavarda.Primitives.Units
                 if (unit.IsDead)
                     continue;
 
+                if (fightersOnly)
+                {
+                    var mobInFight = false;
+                    if (unit is Mob mob)
+                        if (mob.State == Mob.MobState.Fight)
+                            mobInFight = true;
+                    if (!mobInFight)
+                        continue;
+                }
+                    
                 var angle = _hero.Position.AngleTo(unit.Position);
                 var angleDiff = angle - mouseAngle;
                 while (angleDiff > MathF.PI)
@@ -52,7 +62,7 @@ namespace Kalavarda.Primitives.Units
 
                 var value = angleDiff * (MaxSelectionDistance - distance);
                 if (_fightController.CurrentFight != null)
-                    if (_fightController.CurrentFight.Members.Any(m => m.Id == unit.Id))
+                    if (_fightController.CurrentFight.MemberIds.Any(id => id == unit.Id))
                         value *= 2;
                 dict.Add(unit, value);
             }

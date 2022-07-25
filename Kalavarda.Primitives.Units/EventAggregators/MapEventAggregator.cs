@@ -4,7 +4,7 @@ using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units.EventAggregators
 {
-    public class MapEventAggregator: IDisposable, ICreatureEventAggregator, IMakeSounds, ISkillReceiver
+    public class MapEventAggregator: IDisposable, ICreatureEvents, IMakeSounds, ISkillReceiver
     {
         private readonly Map _map;
 
@@ -51,17 +51,17 @@ namespace Kalavarda.Primitives.Units.EventAggregators
             PlaySound?.Invoke(soundKey);
         }
 
-        private void Mob_Died(ICreature obj)
+        private void Mob_Died(ICreature creature)
         {
-            Died?.Invoke(obj);
+            Died?.Invoke(creature);
         }
 
-        private void Mob_Disposing(Unit mob)
+        private void Mob_Disposing(Unit unit)
         {
-            mob.Died -= Mob_Died;
-            mob.PlaySound -= Mob_PlaySound;
-            mob.NegativeSkillReceived -= Unit_NegativeSkillReceived;
-            mob.Disposing -= Mob_Disposing;
+            unit.Died -= Mob_Died;
+            unit.PlaySound -= Mob_PlaySound;
+            unit.NegativeSkillReceived -= Unit_NegativeSkillReceived;
+            unit.Disposing -= Mob_Disposing;
         }
 
         public void Dispose()

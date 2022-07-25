@@ -4,12 +4,12 @@
     {
         private readonly ICollection<UnitInfo> _members = new List<UnitInfo>();
 
-        public IReadOnlyCollection<UnitInfo> Members
+        public IReadOnlyCollection<uint> MemberIds
         {
             get
             {
                 lock (_members)
-                    return _members.ToArray();
+                    return _members.Select(m => m.Id).ToArray();
             }
         }
 
