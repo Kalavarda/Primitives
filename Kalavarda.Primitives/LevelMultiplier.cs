@@ -5,7 +5,12 @@ namespace Kalavarda.Primitives.Units
 {
     public class LevelMultiplier : ILevelMultiplier
     {
-        private readonly float _base = MathF.Sqrt(2);
+        private readonly float _base;
+
+        public LevelMultiplier(float baseValue)
+        {
+            _base = baseValue;
+        }
 
         public float GetRatio(ushort level)
         {

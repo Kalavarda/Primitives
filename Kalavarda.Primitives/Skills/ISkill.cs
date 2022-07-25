@@ -3,7 +3,7 @@ using Kalavarda.Primitives.Process;
 
 namespace Kalavarda.Primitives.Skills
 {
-    public interface ISkill
+    public interface ISkill: IHasKey
     {
         string Name { get; }
 

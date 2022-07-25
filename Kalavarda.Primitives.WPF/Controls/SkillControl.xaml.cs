@@ -5,16 +5,15 @@ using System.Windows.Threading;
 using Kalavarda.Primitives.Abstract;
 using Kalavarda.Primitives.Skills;
 using Kalavarda.Primitives.Utils;
-using Kalavarda.Primitives.WPF.Abstract;
-using Kalavarda.Primitives.WPF.Skills;
+using Kalavarda.Primitives.WPF.Binds;
 
 namespace Kalavarda.Primitives.WPF.Controls
 {
     public partial class SkillControl
     {
         private ISkill _skill;
-        private SkillBind _bind;
-        private readonly DispatcherTimer _timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(0.1) };
+        private KeyBind _bind;
+        private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromSeconds(0.1) };
 
         public ISkill Skill
         {
@@ -66,7 +65,7 @@ namespace Kalavarda.Primitives.WPF.Controls
             });
         }
 
-        public SkillBind Bind
+        public KeyBind Bind
         {
             get => _bind;
             set
