@@ -1,26 +1,37 @@
-﻿using Kalavarda.Primitives.Units.Fight;
+﻿using Kalavarda.Primitives.Abstract;
+using Kalavarda.Primitives.Units.Fight;
 
 namespace Kalavarda.Primitives.Units
 {
-    public class TargetSelector
+    public interface ITargetSelector
+    {
+        Unit Select();
+    }
+
+    public class TargetSelector : ITargetSelector
     {
         private readonly Unit _hero;
         private readonly Map _map;
         private readonly IFightController _fightController;
+        private readonly IMousePositionDetector _mousePositionDetector;
 
         public float MaxSelectionDistance { get; }
 
-        public TargetSelector(Unit hero, Map map, float maxSelectionDistance, IFightController fightController)
+        public TargetSelector(Unit hero, Map map, float maxSelectionDistance, IFightController fightController, IMousePositionDetector mousePositionDetector)
         {
             _hero = hero ?? throw new ArgumentNullException(nameof(hero));
             _map = map ?? throw new ArgumentNullException(nameof(map));
             _fightController = fightController ?? throw new ArgumentNullException(nameof(fightController));
+            _mousePositionDetector = mousePositionDetector ?? throw new ArgumentNullException(nameof(mousePositionDetector));
             MaxSelectionDistance = maxSelectionDistance;
         }
 
         public Unit Select()
         {
             var dict = new Dictionary<Unit, float>();
+
+            var (x, y) = _mousePositionDetector.GetPosition();
+            var mouseAngle = MathF.Atan2(y - _hero.Position.Y, x - _hero.Position.X);
 
             foreach (var unit in _map.Layers.Where(l => !l.IsHidden).SelectMany(l => l.Objects).OfType<Unit>())
             {
@@ -32,7 +43,7 @@ namespace Kalavarda.Primitives.Units
                     continue;
 
                 var angle = _hero.Position.AngleTo(unit.Position);
-                var angleDiff = angle - _hero.MoveDirection.Value;
+                var angleDiff = angle - mouseAngle;
                 while (angleDiff > MathF.PI)
                     angleDiff -= 2 * MathF.PI;
                 while (angleDiff < -MathF.PI)
