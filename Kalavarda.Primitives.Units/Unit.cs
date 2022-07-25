@@ -2,6 +2,7 @@
 using Kalavarda.Primitives.Geometry;
 using Kalavarda.Primitives.Skills;
 using Kalavarda.Primitives.Sound;
+using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
@@ -59,22 +60,11 @@ namespace Kalavarda.Primitives.Units
                 if (_target == value)
                     return;
 
-                if (_target != null)
-                    _target.Died -= Target_Died;
-
                 var oldValue = _target;
                 _target = value;
 
-                if (_target != null)
-                    _target.Died += Target_Died;
-
                 TargetChanged?.Invoke(oldValue, value);
             }
-        }
-
-        private void Target_Died(ICreature obj)
-        {
-            Target = null;
         }
 
         public event Action<Unit, Unit> TargetChanged;

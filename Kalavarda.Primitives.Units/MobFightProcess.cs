@@ -31,6 +31,13 @@ namespace Kalavarda.Primitives.Units
                 return;
             }
 
+            if (_mob.Target.IsDead)
+            {
+                _mob.Target = null;
+                Stop();
+                return;
+            }
+
             var skillFound = false;
             _attackLimiter.Do(() =>
             {

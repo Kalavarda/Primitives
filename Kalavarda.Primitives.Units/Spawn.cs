@@ -1,5 +1,6 @@
 ﻿using Kalavarda.Primitives.Abstract;
 using Kalavarda.Primitives.Geometry;
+using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
