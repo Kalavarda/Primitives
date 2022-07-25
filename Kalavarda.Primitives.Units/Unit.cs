@@ -107,8 +107,21 @@ namespace Kalavarda.Primitives.Units
 
         public static void Apply(Unit from, UnitChanges changes, Unit to)
         {
+            ChangeHP(from, to, changes.HP);
+        }
+
+        private static void ChangeHP(Unit from, Unit to, float hpDiff)
+        {
             var oldHp = to.HP.Value;
-            to.HP.Value += changes.HP;
+
+            if (from is IMob mob1)
+                hpDiff *= mob1.AttackRatio;
+
+            if (to is IMob mob2)
+                hpDiff /= mob2.DefRatio;
+
+            to.HP.Value += hpDiff;
+
             if (to.HP.Value < oldHp)
                 to.NegativeSkillReceived?.Invoke(from, to);
         }

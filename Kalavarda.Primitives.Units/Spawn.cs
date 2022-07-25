@@ -17,13 +17,14 @@ namespace Kalavarda.Primitives.Units
 
         public DateTime LastUnitDied { get; private set; } = DateTime.MinValue;
 
-        public TimeSpan PeriodAfterDeath { get; } = TimeSpan.FromSeconds(12);
+        public TimeSpan PeriodAfterDeath { get; }
 
         private readonly TimeLimiter _timeLimiter = new(TimeSpan.FromSeconds(1));
 
-        public Spawn(float radius)
+        public Spawn(float radius, TimeSpan periodAfterDeath)
         {
             Bounds = new RoundBounds(Position, radius);
+            PeriodAfterDeath = periodAfterDeath;
         }
 
         public Unit Create()

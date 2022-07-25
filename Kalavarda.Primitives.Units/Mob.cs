@@ -4,7 +4,7 @@ using Kalavarda.Primitives.Process;
 
 namespace Kalavarda.Primitives.Units
 {
-    public abstract class Mob : Unit, IHasLevel
+    public abstract class Mob : Unit, IHasLevel, IMob
     {
         private static readonly ICollection<Mob> _mobs = new List<Mob>();
 
@@ -19,6 +19,10 @@ namespace Kalavarda.Primitives.Units
                     return _mobs.ToImmutableArray();
             }
         }
+
+        public float AttackRatio { get; set; }
+        
+        public float DefRatio { get; set; }
 
         public MobState State
         {
