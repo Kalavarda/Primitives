@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -45,11 +46,6 @@ namespace Kalavarda.Primitives.Units.WPF.Units
             InitializeComponent();
         }
 
-        private void OnContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            SelectedItem.Equals(null);
-        }
-
         private void _itemsControl_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             var point = e.GetPosition(_itemsControl);
@@ -57,6 +53,22 @@ namespace Kalavarda.Primitives.Units.WPF.Units
             while (!(frameworkElement is ContainerItemControl) && frameworkElement.Parent != null)
                 frameworkElement = frameworkElement.Parent as FrameworkElement;
             SelectedItem = frameworkElement is ContainerItemControl bagItemControl ? bagItemControl.Item : null;
+        }
+
+        public event Action<ContextMenu, Item> ContextMenuOpening;
+
+        public event Action<Item> UseDefaultAction;
+
+        private void OnContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            if (SelectedItem != null)
+                ContextMenuOpening?.Invoke(_menu, SelectedItem);
+        }
+
+        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedItem != null)
+                UseDefaultAction?.Invoke(SelectedItem);
         }
     }
 }
