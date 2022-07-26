@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Kalavarda.Primitives.Abstract;
 using Kalavarda.Primitives.Process;
+using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {

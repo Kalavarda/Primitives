@@ -42,7 +42,8 @@ namespace Kalavarda.Primitives.WPF.Controllers
                 {
                     State = window.WindowState,
                     Size = new Size(window.Width, window.Height),
-                    Location = new Point(window.Left, window.Top)
+                    Left = !double.IsNaN(window.Left) ? window.Left : default,
+                    Top = !double.IsNaN(window.Top) ? window.Top : default
                 };
                 _data.Add(windowKey, windowData);
             }
@@ -50,8 +51,8 @@ namespace Kalavarda.Primitives.WPF.Controllers
             window.WindowState = windowData.State;
             window.Width = windowData.Size.Width;
             window.Height = windowData.Size.Height;
-            window.Left = windowData.Location.X;
-            window.Top = windowData.Location.Y;
+            window.Left = windowData.Left;
+            window.Top = windowData.Top;
 
             window.SizeChanged += Window_SizeChanged;
             window.StateChanged += Window_StateChanged;
@@ -76,7 +77,9 @@ namespace Kalavarda.Primitives.WPF.Controllers
             if (window.IsInitialized)
             {
                 var key = _keys[window];
-                _data[key].Location = new Point(window.Left, window.Top);
+                var data = _data[key];
+                data.Left = window.Left;
+                data.Top = window.Top;
                 Save();
             }
         }
@@ -111,8 +114,10 @@ namespace Kalavarda.Primitives.WPF.Controllers
             public WindowState State { get; set; }
             
             public Size Size { get; set; }
-            
-            public Point Location { get; set; }
+
+            public double Left { get; set; }
+
+            public double Top { get; set; }
         }
 
         private static void Save()

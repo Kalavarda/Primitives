@@ -1,4 +1,5 @@
 ﻿using System;
+using Kalavarda.Primitives.Abstract;
 using Kalavarda.Primitives.Process;
 
 namespace Kalavarda.Primitives.Skills
@@ -17,11 +18,6 @@ namespace Kalavarda.Primitives.Skills
         float MinDistance { get; }
 
         float MaxDistance { get; }
-    }
-
-    public interface IHasKey
-    {
-        string Key { get; }
     }
 
     public interface IHasCount<T> where T: struct

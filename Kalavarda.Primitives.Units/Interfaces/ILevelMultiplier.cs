@@ -1,4 +1,4 @@
-﻿namespace Kalavarda.Primitives.Abstract
+﻿namespace Kalavarda.Primitives.Units.Interfaces
 {
     public interface ILevelMultiplier
     {

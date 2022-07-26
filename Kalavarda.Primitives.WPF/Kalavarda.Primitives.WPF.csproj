@@ -9,8 +9,4 @@
     <ProjectReference Include="..\Kalavarda.Primitives\Kalavarda.Primitives.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Skills\" />
-  </ItemGroup>
-
 </Project>

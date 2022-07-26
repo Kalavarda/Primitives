@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kalavarda.Primitives.Units\Kalavarda.Primitives.Units.csproj" />
+    <ProjectReference Include="..\Kalavarda.Primitives.WPF\Kalavarda.Primitives.WPF.csproj" />
+    <ProjectReference Include="..\Kalavarda.Primitives\Kalavarda.Primitives.csproj" />
+  </ItemGroup>
+
+</Project>
