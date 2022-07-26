@@ -54,7 +54,7 @@ namespace Kalavarda.Primitives.Units.WPF.Units
             DataContextChanged += BagItemControl_DataContextChanged;
         }
 
-        private void BagItemControl_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        private void BagItemControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             Item = (Item)DataContext;
         }
