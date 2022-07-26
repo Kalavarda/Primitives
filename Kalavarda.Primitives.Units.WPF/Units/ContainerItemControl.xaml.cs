@@ -1,6 +1,7 @@
-﻿using System.Windows.Media.Imaging;
-using Kalavarda.Primitives.Abstract;
+﻿using System.Windows;
+using System.Windows.Media.Imaging;
 using Kalavarda.Primitives.Units.Items;
+using Kalavarda.Primitives.WPF;
 
 namespace Kalavarda.Primitives.Units.WPF.Units
 {
@@ -16,14 +17,35 @@ namespace Kalavarda.Primitives.Units.WPF.Units
                 if (_item == value)
                     return;
 
+                if (_item != null)
+                    _item.CountChanged -= Item_CountChanged;
+
                 _item = value;
 
-                if (_item == value)
+                if (_item != null)
                 {
-                    if (_item is IHasImage hasImage)
-                        _image.Source = new BitmapImage(hasImage.ImageUri);
+                    _image.Source = new BitmapImage(_item.ImageUri);
+                    _item.CountChanged += Item_CountChanged;
+                    Item_CountChanged(_item, 0, _item.Count);
                 }
             }
+        }
+
+        private void Item_CountChanged(Abstract.IHasCount item, uint oldCount, uint newCount)
+        {
+            this.Do(() =>
+            {
+                if (newCount > 1)
+                {
+                    _tbCount.Text = newCount.ToString();
+                    _borderCount.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    _borderCount.Visibility = Visibility.Collapsed;
+                    _tbCount.Text = string.Empty;
+                }
+            });
         }
 
         public ContainerItemControl()

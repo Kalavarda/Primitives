@@ -16,7 +16,14 @@
         public void Add(Item item)
         {
             lock (_items)
-                _items.Add(item);
+            {
+                var existItem = _items.FirstOrDefault(i => i.Type == item.Type);
+                if (existItem != null)
+                    existItem.Count += item.Count;
+                else
+                    _items.Add(item);
+            }
+
             Changed?.Invoke(this);
         }
 
