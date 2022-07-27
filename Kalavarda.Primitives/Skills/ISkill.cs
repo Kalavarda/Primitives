@@ -1,6 +1,5 @@
 ﻿using System;
 using Kalavarda.Primitives.Abstract;
-using Kalavarda.Primitives.Process;
 
 namespace Kalavarda.Primitives.Skills
 {
@@ -9,8 +8,6 @@ namespace Kalavarda.Primitives.Skills
         string Name { get; }
 
         ITimeLimiter TimeLimiter { get; }
-
-        IProcess Use();
     }
 
     public interface IDistanceSkill

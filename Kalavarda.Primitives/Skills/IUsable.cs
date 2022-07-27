@@ -4,6 +4,6 @@ namespace Kalavarda.Primitives.Skills
 {
     public interface IUsable
     {
-        IProcess Use();
+        IProcess Use(ISkilled actor);
     }
 }

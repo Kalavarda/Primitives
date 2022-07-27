@@ -46,11 +46,15 @@ namespace Kalavarda.Primitives.Units.WPF.Units
             InitializeComponent();
         }
 
-        private void _itemsControl_OnMouseDown(object sender, MouseButtonEventArgs e)
+        private void ItemsControl_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             var point = e.GetPosition(_itemsControl);
-            var frameworkElement = (FrameworkElement)System.Windows.Media.VisualTreeHelper.HitTest(this, point).VisualHit;
-            while (!(frameworkElement is ContainerItemControl) && frameworkElement.Parent != null)
+            var hitTestResult = System.Windows.Media.VisualTreeHelper.HitTest(this, point);
+            if (hitTestResult == null)
+                return;
+
+            var frameworkElement = (FrameworkElement)hitTestResult.VisualHit;
+            while (frameworkElement is not ContainerItemControl && frameworkElement.Parent != null)
                 frameworkElement = frameworkElement.Parent as FrameworkElement;
             SelectedItem = frameworkElement is ContainerItemControl bagItemControl ? bagItemControl.Item : null;
         }

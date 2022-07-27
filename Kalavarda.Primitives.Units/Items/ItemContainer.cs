@@ -32,7 +32,7 @@
         /// <summary>
         /// Пытается забрать указанное кол-во предметов
         /// </summary>
-        public bool Pull(ItemType type, uint count, out Item item)
+        public bool TryPull(ItemType type, uint count, out Item item)
         {
             item = null;
 

@@ -48,7 +48,7 @@ namespace Kalavarda.Primitives.Units
                         if (distanceSkill.MaxDistance < distance)
                             continue;
 
-                    var skillProcess = skill.Use();
+                    var skillProcess = skill.Use(_mob);
                     skillFound = true;
                     if (skillProcess != null)
                         _processor.Add(skillProcess);

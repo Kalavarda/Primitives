@@ -37,7 +37,7 @@ namespace Kalavarda.Primitives.WPF.Controllers
 
             #endregion
 
-            var process = skill.Use();
+            var process = skill.Use(_hero);
             if (process != null)
                 _processor.Add(process);
         }
