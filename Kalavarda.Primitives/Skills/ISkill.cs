@@ -4,7 +4,7 @@ using Kalavarda.Primitives.Process;
 
 namespace Kalavarda.Primitives.Skills
 {
-    public interface ISkill: IHasKey
+    public interface ISkill: IHasKey, IUsable
     {
         string Name { get; }
 

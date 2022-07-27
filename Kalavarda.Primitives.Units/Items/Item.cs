@@ -1,12 +1,14 @@
-﻿using Kalavarda.Primitives.Abstract;
+﻿using System.Diagnostics;
+using Kalavarda.Primitives.Abstract;
 
 namespace Kalavarda.Primitives.Units.Items
 {
+    [DebuggerDisplay("{Name} x{Count}")]
     public class Item: IHasId, IHasName, IHasImage, IHasCount
     {
         private static uint _counter;
         
-        private uint _count;
+        private uint _count = 1;
 
         public ItemType Type { get; }
 
@@ -39,5 +41,10 @@ namespace Kalavarda.Primitives.Units.Items
         }
 
         public event Action<IHasCount, uint, uint> CountChanged;
+
+        public Item Clone()
+        {
+            return new Item(Type) { Count =Count };
+        }
     }
 }

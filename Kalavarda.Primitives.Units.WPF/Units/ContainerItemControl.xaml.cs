@@ -52,6 +52,13 @@ namespace Kalavarda.Primitives.Units.WPF.Units
         {
             InitializeComponent();
             DataContextChanged += BagItemControl_DataContextChanged;
+            Unloaded += ContainerItemControl_Unloaded;
+        }
+
+        private void ContainerItemControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            DataContextChanged -= BagItemControl_DataContextChanged;
+            Item = null;
         }
 
         private void BagItemControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
