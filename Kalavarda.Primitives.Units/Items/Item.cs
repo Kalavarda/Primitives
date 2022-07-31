@@ -42,7 +42,7 @@ namespace Kalavarda.Primitives.Units.Items
 
         public event Action<IHasCount, uint, uint> CountChanged;
 
-        public Item Clone()
+        public virtual Item Clone()
         {
             return new Item(Type) { Count =Count };
         }

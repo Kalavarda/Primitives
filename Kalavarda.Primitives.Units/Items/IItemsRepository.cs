@@ -1,6 +1,6 @@
 ﻿namespace Kalavarda.Primitives.Units.Items
 {
-    public interface IItemsRepository
+    public interface IReadonlyItemsRepository
     {
         ItemType GetById(uint id);
     }

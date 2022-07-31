@@ -1,7 +1,7 @@
-﻿<UserControl x:Class="Kalavarda.Primitives.Units.WPF.Units.ItemContainerControl"
+﻿<UserControl x:Class="Kalavarda.Primitives.Units.WPF.Items.ItemContainerControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:units="clr-namespace:Kalavarda.Primitives.Units.WPF.Units">
+             xmlns:items="clr-namespace:Kalavarda.Primitives.Units.WPF.Items">
     <ItemsControl x:Name="_itemsControl" MouseDown="ItemsControl_OnMouseDown" MouseDoubleClick="OnMouseDoubleClick" ContextMenuOpening="OnContextMenuOpening">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
@@ -10,7 +10,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <units:ContainerItemControl Margin="2"/>
+                <items:ContainerItemControl Margin="2"/>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
         <ItemsControl.ContextMenu>

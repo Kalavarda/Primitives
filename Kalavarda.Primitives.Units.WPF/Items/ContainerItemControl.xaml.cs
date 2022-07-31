@@ -3,7 +3,7 @@ using System.Windows.Media.Imaging;
 using Kalavarda.Primitives.Units.Items;
 using Kalavarda.Primitives.WPF;
 
-namespace Kalavarda.Primitives.Units.WPF.Units
+namespace Kalavarda.Primitives.Units.WPF.Items
 {
     public partial class ContainerItemControl
     {

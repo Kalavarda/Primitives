@@ -2,11 +2,12 @@
 using Kalavarda.Primitives.Geometry;
 using Kalavarda.Primitives.Skills;
 using Kalavarda.Primitives.Sound;
+using Kalavarda.Primitives.Units.Buffs;
 using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
-    public abstract class Unit : IMapObject, ISkilled, ICreature, IMakeSounds, IDisposable, ISkillReceiver
+    public abstract class Unit : IMapObject, ISkilled, ICreature, IMakeSounds, IDisposable, ISkillReceiver, IHasBuffs
     {
         public static readonly TimeSpan GlobalCooldown = TimeSpan.FromSeconds(0.5);
         private Unit _target;
@@ -121,6 +122,34 @@ namespace Kalavarda.Primitives.Units
         public void Dispose()
         {
             Disposing?.Invoke(this);
+        }
+
+        private readonly ICollection<Buff> _buffs = new List<Buff>();
+
+        public IReadOnlyCollection<Buff> Buffs
+        {
+            get
+            {
+                lock (_buffs)
+                    return _buffs.ToArray();
+            }
+        }
+
+        public event Action<IReadonlyHasBuffs, Buff> BuffAdded;
+        public event Action<IReadonlyHasBuffs, Buff> BuffRemoved;
+
+        public void Add(Buff buff)
+        {
+            lock(_buffs)
+                _buffs.Add(buff);
+            BuffAdded?.Invoke(this, buff);
+        }
+
+        public void Remove(Buff buff)
+        {
+            lock (_buffs)
+                _buffs.Remove(buff);
+            BuffRemoved?.Invoke(this, buff);
         }
     }
 }
