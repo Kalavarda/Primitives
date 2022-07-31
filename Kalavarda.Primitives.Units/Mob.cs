@@ -5,7 +5,7 @@ using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
-    public abstract class Mob : Unit, IHasLevel, IMob
+    public abstract class Mob : Unit, IHasLevel, IMob, IChangesModifier
     {
         private static readonly ICollection<Mob> _mobs = new List<Mob>();
 
@@ -90,5 +90,15 @@ namespace Kalavarda.Primitives.Units
         }
 
         public event Action<IHasLevel> LevelChanged;
+
+        public void ChangeIncome(UnitChanges changes)
+        {
+            changes.HP /= DefRatio;
+        }
+
+        public void ChangeOutcome(UnitChanges changes)
+        {
+            changes.HP *= AttackRatio;
+        }
     }
 }

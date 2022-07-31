@@ -10,7 +10,7 @@ namespace Kalavarda.Primitives.Units
             SkillOrItemName = skillOrItemName ?? throw new ArgumentNullException(nameof(skillOrItemName));
         }
 
-        public float HP { get; }
+        public float HP { get; set; }
 
         public IHasName SkillOrItemName { get; }
     }

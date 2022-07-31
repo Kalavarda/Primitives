@@ -98,18 +98,18 @@ namespace Kalavarda.Primitives.Units
 
         public static void Apply(Unit from, UnitChanges changes, Unit to)
         {
+            if (from is IChangesModifier modifier1)
+                modifier1.ChangeOutcome(changes);
+
+            if (to is IChangesModifier modifier2)
+                modifier2.ChangeIncome(changes);
+
             ChangeHP(from, to, changes.HP);
         }
 
         private static void ChangeHP(Unit from, Unit to, float hpDiff)
         {
             var oldHp = to.HP.Value;
-
-            if (from is IMob mob1)
-                hpDiff *= mob1.AttackRatio;
-
-            if (to is IMob mob2)
-                hpDiff /= mob2.DefRatio;
 
             to.HP.Value += hpDiff;
 
