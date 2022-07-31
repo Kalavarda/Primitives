@@ -24,7 +24,7 @@ namespace Kalavarda.Primitives.Units.WPF.Items
 
                 if (_item != null)
                 {
-                    _image.Source = new BitmapImage(_item.ImageUri);
+                    _image.Source = BitmapImageCache.Instance.Get(_item.ImageUri);
                     _item.CountChanged += Item_CountChanged;
                     Item_CountChanged(_item, 0, _item.Count);
                 }

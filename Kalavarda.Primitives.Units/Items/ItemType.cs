@@ -4,13 +4,16 @@ namespace Kalavarda.Primitives.Units.Items
 {
     public class ItemType: IHasName, IHasId, IHasImage
     {
+        private static uint _counter;
+
         public uint Id { get; }
 
         public string Name { get; }
 
-        public ItemType(uint id, string name, ItemQuality quality)
+        public ItemType(string name, ItemQuality quality)
         {
-            Id = id;
+            _counter++;
+            Id = _counter;
             Name = name;
             Quality = quality;
         }

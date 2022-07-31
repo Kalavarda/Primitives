@@ -1,5 +1,6 @@
 ﻿using System.Windows.Media.Imaging;
 using Kalavarda.Primitives.Units.Buffs;
+using Kalavarda.Primitives.WPF;
 
 namespace Kalavarda.Primitives.Units.WPF.Buffs
 {
@@ -15,7 +16,7 @@ namespace Kalavarda.Primitives.Units.WPF.Buffs
         private void BuffControl_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
         {
             _image.Source = DataContext is Buff buff
-                ? new BitmapImage(buff.ImageUri) // TODO: кэш
+                ? BitmapImageCache.Instance.Get(buff.ImageUri) // TODO: кэш
                 : null;
         }
     }

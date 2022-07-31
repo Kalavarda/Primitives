@@ -40,7 +40,7 @@ namespace Kalavarda.Primitives.WPF.Controls
                     if (_skill is IHasImage hasImage)
                     {
                         _image.Visibility = Visibility.Visible;
-                        _image.Source = new BitmapImage(hasImage.ImageUri);
+                        _image.Source = BitmapImageCache.Instance.Get(hasImage.ImageUri);
                     }
                 }
                 else
