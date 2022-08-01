@@ -25,7 +25,7 @@ namespace Kalavarda.Primitives.Units
                 return;
             }
 
-            foreach (var spawn in _map.Layers.SelectMany(l => l.Objects).OfType<Spawn>())
+            foreach (var spawn in _map.Layers.SelectMany(l => l.Objects).OfType<SpawnBase>())
             {
                 var unit = spawn.Create();
                 if (unit != null)

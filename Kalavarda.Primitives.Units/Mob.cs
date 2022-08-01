@@ -51,9 +51,9 @@ namespace Kalavarda.Primitives.Units
 
         public abstract IProcess CreateFightProcess(IProcessor processor);
 
-        public Spawn Spawn { get; }
+        public SpawnBase Spawn { get; }
 
-        protected Mob(RangeF moveSpeed, Spawn spawn) : base(moveSpeed)
+        protected Mob(RangeF moveSpeed, SpawnBase spawn) : base(moveSpeed)
         {
             lock(_mobs)
                 _mobs.Add(this);

@@ -1,4 +1,5 @@
-﻿using Kalavarda.Primitives.Abstract;
+﻿using System.Diagnostics;
+using Kalavarda.Primitives.Abstract;
 using Kalavarda.Primitives.Geometry;
 using Kalavarda.Primitives.Skills;
 using Kalavarda.Primitives.Sound;
@@ -7,7 +8,7 @@ using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
-    public abstract class Unit : IMapObject, ISkilled, ICreature, IMakeSounds, IDisposable, ISkillReceiver, IHasBuffs
+    public abstract class Unit : IMapObject, ISkilled, ICreature, IMakeSounds, ISkillReceiver, IHasBuffs, IHasDispose
     {
         public static readonly TimeSpan GlobalCooldown = TimeSpan.FromSeconds(0.5);
         private Unit _target;
@@ -94,7 +95,7 @@ namespace Kalavarda.Primitives.Units
             PlaySound?.Invoke(soundKey);
         }
 
-        public event Action<Unit> Disposing;
+        public event Action<IHasDispose> Disposing;
 
         public static void Apply(Unit from, UnitChanges changes, Unit to)
         {

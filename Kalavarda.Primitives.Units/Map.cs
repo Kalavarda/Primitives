@@ -1,4 +1,5 @@
 ﻿using Kalavarda.Primitives.Abstract;
+using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
@@ -32,10 +33,10 @@ namespace Kalavarda.Primitives.Units
                 unit.Disposing += Unit_Disposing;
         }
 
-        private void Unit_Disposing(Unit unit)
+        private void Unit_Disposing(IHasDispose hasDispose)
         {
-            Remove(unit);
-            unit.Disposing -= Unit_Disposing;
+            Remove((IMapObject)hasDispose);
+            hasDispose.Disposing -= Unit_Disposing;
         }
 
         public void Remove(IMapObject obj)

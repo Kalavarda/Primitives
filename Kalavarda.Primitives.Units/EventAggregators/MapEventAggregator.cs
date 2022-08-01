@@ -56,8 +56,9 @@ namespace Kalavarda.Primitives.Units.EventAggregators
             Died?.Invoke(creature);
         }
 
-        private void Mob_Disposing(Unit unit)
+        private void Mob_Disposing(IHasDispose hasDispose)
         {
+            var unit = (Unit)hasDispose;
             unit.Died -= Mob_Died;
             unit.PlaySound -= Mob_PlaySound;
             unit.NegativeSkillReceived -= Unit_NegativeSkillReceived;
