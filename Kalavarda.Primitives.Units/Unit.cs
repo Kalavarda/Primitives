@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Kalavarda.Primitives.Abstract;
+﻿using Kalavarda.Primitives.Abstract;
 using Kalavarda.Primitives.Geometry;
 using Kalavarda.Primitives.Skills;
 using Kalavarda.Primitives.Sound;
@@ -97,28 +96,34 @@ namespace Kalavarda.Primitives.Units
 
         public event Action<IHasDispose> Disposing;
 
-        public static void Apply(Unit from, UnitChanges changes, Unit to)
+        public static void Apply(IFighter from, UnitChanges changes, IFighter target)
         {
-            if (from is IChangesModifier modifier1)
-                modifier1.ChangeOutcome(changes);
+            if (from is IChangesModifier modifierF)
+                modifierF.ChangeOutcome(changes);
 
-            if (to is IChangesModifier modifier2)
-                modifier2.ChangeIncome(changes);
+            if (target is IChangesModifier modifierT)
+                modifierT.ChangeIncome(changes);
 
-            ChangeHP(from, to, changes.HP);
+            ChangeHP(from, target, changes.HP);
         }
 
-        private static void ChangeHP(Unit from, Unit to, float hpDiff)
+        private static void ChangeHP(IFighter from, IFighter target, float hpDelta)
         {
-            var oldHp = to.HP.Value;
+            if (target is ICreature creature)
+            {
+                var oldHp = creature.HP.Value;
 
-            to.HP.Value += hpDiff;
+                creature.HP.Value += hpDelta;
 
-            if (to.HP.Value < oldHp)
-                to.NegativeSkillReceived?.Invoke(from, to);
+                if (creature.HP.Value < oldHp)
+                    if (target is Unit unit)
+                        unit.NegativeSkillReceived?.Invoke(from, target);
+            }
+            else
+                throw new NotImplementedException();
         }
 
-        public event Action<Unit, Unit> NegativeSkillReceived;
+        public event Action<IFighter, IFighter> NegativeSkillReceived;
 
         public void Dispose()
         {

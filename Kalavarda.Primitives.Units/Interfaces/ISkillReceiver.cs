@@ -2,6 +2,6 @@
 {
     public interface ISkillReceiver
     {
-        event Action<Unit, Unit> NegativeSkillReceived;
+        event Action<IFighter, IFighter> NegativeSkillReceived;
     }
 }

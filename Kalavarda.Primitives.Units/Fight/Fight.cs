@@ -1,8 +1,10 @@
-﻿namespace Kalavarda.Primitives.Units.Fight
+﻿using Kalavarda.Primitives.Units.Interfaces;
+
+namespace Kalavarda.Primitives.Units.Fight
 {
     public class Fight
     {
-        private readonly ICollection<UnitInfo> _members = new List<UnitInfo>();
+        private readonly ICollection<UnitPhantom> _members = new List<UnitPhantom>();
 
         public IReadOnlyCollection<uint> MemberIds
         {
@@ -13,30 +15,26 @@
             }
         }
 
-        public Fight(Unit member1, Unit member2)
+        public Fight(IFighter member1, IFighter member2)
         {
             Add(member1);
             Add(member2);
         }
 
-        public void Add(Unit member)
+        public void Add(IFighter member)
         {
             lock (_members)
                 if (_members.All(ui => ui.Id != member.Id))
-                    _members.Add(new UnitInfo(member));
-        }
+                {
+                    // TODO: оставить только IFighter
 
-        public class UnitInfo
-        {
-            public uint Id { get; }
-
-            public string Name { get; }
-
-            public UnitInfo(Unit unit)
-            {
-                Id = unit.Id;
-                Name = unit.GetType().Name;
-            }
+                    if (member is UnitPhantom phantom)
+                        _members.Add(phantom);
+                    else if (member is Unit unit)
+                        _members.Add(new UnitPhantom(unit));
+                    else
+                        throw new NotImplementedException();
+                }
         }
     }
 }

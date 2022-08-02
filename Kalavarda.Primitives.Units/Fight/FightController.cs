@@ -67,7 +67,7 @@ namespace Kalavarda.Primitives.Units.Fight
                     CurrentFight = null;
         }
 
-        private void NegativeSkillReceived(Unit fromUnit, Unit toUnit)
+        private void NegativeSkillReceived(IFighter fromUnit, IFighter toUnit)
         {
             _lastNegativeReceivedTime = DateTime.Now;
             if (CurrentFight == null)

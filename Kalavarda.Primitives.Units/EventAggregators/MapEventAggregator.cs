@@ -21,7 +21,7 @@ namespace Kalavarda.Primitives.Units.EventAggregators
 
         public event Action<string> PlaySound;
 
-        public event Action<Unit, Unit> NegativeSkillReceived;
+        public event Action<IFighter, IFighter> NegativeSkillReceived;
 
         private void Map_LayerAdded(MapLayer mapLayer)
         {
@@ -41,7 +41,7 @@ namespace Kalavarda.Primitives.Units.EventAggregators
             }
         }
 
-        private void Unit_NegativeSkillReceived(Unit fromUnit, Unit toUnit)
+        private void Unit_NegativeSkillReceived(IFighter fromUnit, IFighter toUnit)
         {
             NegativeSkillReceived?.Invoke(fromUnit, toUnit);
         }

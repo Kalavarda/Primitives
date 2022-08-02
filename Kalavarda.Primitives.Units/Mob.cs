@@ -1,11 +1,10 @@
 ﻿using System.Collections.Immutable;
-using Kalavarda.Primitives.Abstract;
 using Kalavarda.Primitives.Process;
 using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
-    public abstract class Mob : Unit, IHasLevel, IMob, IChangesModifier
+    public abstract class Mob : Unit, IHasLevel, IMob, IChangesModifier, IFighter
     {
         private static readonly ICollection<Mob> _mobs = new List<Mob>();
 
@@ -100,5 +99,7 @@ namespace Kalavarda.Primitives.Units
         {
             changes.HP *= AttackRatio;
         }
+
+        public string Name => GetType().Name;
     }
 }
