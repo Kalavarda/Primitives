@@ -62,6 +62,13 @@ namespace Kalavarda.Primitives.Geometry
             throw new NotImplementedException();
         }
 
+        public float DistanceTo(float x, float y)
+        {
+            var dx = x - X;
+            var dy = y - Y;
+            return MathF.Sqrt(dx * dx + dy * dy);
+        }
+
         public PointF()
         {
         }

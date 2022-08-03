@@ -1,5 +1,7 @@
-﻿using Kalavarda.Primitives.Process;
+﻿using Kalavarda.Primitives.Abstract;
+using Kalavarda.Primitives.Process;
 using Kalavarda.Primitives.Skills;
+using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
@@ -31,7 +33,7 @@ namespace Kalavarda.Primitives.Units
                 return;
             }
 
-            if (_mob.Target.IsDead)
+            if (_mob.Target is ICreature { IsDead: true })
             {
                 _mob.Target = null;
                 Stop();
@@ -41,18 +43,21 @@ namespace Kalavarda.Primitives.Units
             var skillFound = false;
             _attackLimiter.Do(() =>
             {
-                var distance = _mob.Position.DistanceTo(_mob.Target.Position);
-                foreach (var skill in _mob.GetReadySkills())
+                if (_mob.Target is IHasPosition hasPosition)
                 {
-                    if (skill is IDistanceSkill distanceSkill)
-                        if (distanceSkill.MaxDistance < distance)
-                            continue;
+                    var distance = _mob.Position.DistanceTo(hasPosition.Position);
+                    foreach (var skill in _mob.GetReadySkills())
+                    {
+                        if (skill is IDistanceSkill distanceSkill)
+                            if (distanceSkill.MaxDistance < distance)
+                                continue;
 
-                    var skillProcess = skill.Use(_mob);
-                    skillFound = true;
-                    if (skillProcess != null)
-                        _processor.Add(skillProcess);
-                    break;
+                        var skillProcess = skill.Use(_mob);
+                        skillFound = true;
+                        if (skillProcess != null)
+                            _processor.Add(skillProcess);
+                        break;
+                    }
                 }
             });
 
@@ -62,19 +67,19 @@ namespace Kalavarda.Primitives.Units
 
         private void MoveToTarget(TimeSpan delta)
         {
-            //if (_mob.Target == null)
-            //    return;
+            if (_mob.Target is IHasPosition hasPosition)
+            {
+                var distance = _mob.Position.DistanceTo(hasPosition.Position);
+                var nearestSkill = _mob.Skills.OfType<IDistanceSkill>().Min(sk => sk.MaxDistance);
+                if (distance < nearestSkill)
+                    return;
 
-            var distance = _mob.Position.DistanceTo(_mob.Target.Position);
-            var nearestSkill = _mob.Skills.OfType<IDistanceSkill>().Min(sk => sk.MaxDistance);
-            if (distance < nearestSkill)
-                return;
-
-            var angle = _mob.Position.AngleTo(_mob.Target.Position);
-            var d = _mob.MoveSpeed.Max * (float)delta.TotalSeconds;
-            var dx = d * MathF.Cos(angle);
-            var dy = d * MathF.Sin(angle);
-            _mob.Position.Set(_mob.Position.X + dx, _mob.Position.Y + dy);
+                var angle = _mob.Position.AngleTo(hasPosition.Position);
+                var d = _mob.MoveSpeed.Max * (float)delta.TotalSeconds;
+                var dx = d * MathF.Cos(angle);
+                var dy = d * MathF.Sin(angle);
+                _mob.Position.Set(_mob.Position.X + dx, _mob.Position.Y + dy);
+            }
         }
 
         public void Stop()

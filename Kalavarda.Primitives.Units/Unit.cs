@@ -10,8 +10,7 @@ namespace Kalavarda.Primitives.Units
     public abstract class Unit : IMapObject, ISkilled, ICreature, IMakeSounds, ISkillReceiver, IHasBuffs, IHasDispose
     {
         public static readonly TimeSpan GlobalCooldown = TimeSpan.FromSeconds(0.5);
-        private Unit _target;
-        private bool _isSelected;
+        private ISelectable _target;
 
         private static uint _counter;
 
@@ -46,14 +45,14 @@ namespace Kalavarda.Primitives.Units
         public RangeF HP { get; } = new();
 
         /// <inheritdoc/>
-        public bool IsAlive => !HP.IsMin;
+        public bool IsAlive => !IsDead;
 
         /// <inheritdoc/>
         public bool IsDead => HP.IsMin;
 
         public event Action<ICreature> Died;
 
-        public Unit Target
+        public ISelectable Target
         {
             get => _target;
             set
@@ -68,24 +67,9 @@ namespace Kalavarda.Primitives.Units
             }
         }
 
-        public event Action<Unit, Unit> TargetChanged;
+        public event Action<ISelectable, ISelectable> TargetChanged;
 
         public abstract IEnumerable<ISkill> Skills { get; }
-
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                if (_isSelected == value)
-                    return;
-
-                _isSelected = value;
-                IsSelectedChanged?.Invoke(this);
-            }
-        }
-
-        public event Action<Unit> IsSelectedChanged;
 
         public event Action<string> PlaySound;
 

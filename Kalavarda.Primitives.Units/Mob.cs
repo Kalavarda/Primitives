@@ -4,9 +4,9 @@ using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
-    public abstract class Mob : Unit, IHasLevel, IMob, IChangesModifier, IFighter
+    public abstract class Mob : Unit, IHasLevel, IMob, IChangesModifier, IFighter, ISelectable
     {
-        private static readonly ICollection<Mob> _mobs = new List<Mob>();
+        private static readonly ICollection<Mob> _mobs = new List<Mob>(); // TODO remove
 
         private MobState _state = MobState.New;
         private ushort _level;
@@ -37,6 +37,7 @@ namespace Kalavarda.Primitives.Units
                 StateChangedTime = DateTime.Now;
 
                 StateChanged?.Invoke(this, oldValue, value);
+                IsSelectableChanged?.Invoke(this);
             }
         }
 
@@ -57,6 +58,13 @@ namespace Kalavarda.Primitives.Units
             lock(_mobs)
                 _mobs.Add(this);
             Spawn = spawn;
+            HP.ValueChanged += HP_ValueChanged;
+        }
+
+        private void HP_ValueChanged(RangeF hp)
+        {
+            if (IsDead)
+                IsSelectableChanged?.Invoke(this);
         }
 
         public enum MobState
@@ -101,5 +109,9 @@ namespace Kalavarda.Primitives.Units
         }
 
         public string Name => GetType().Name;
+
+        public bool IsSelectable => IsAlive && State is MobState.Idle or MobState.Fight;
+
+        public event Action<ISelectable> IsSelectableChanged;
     }
 }

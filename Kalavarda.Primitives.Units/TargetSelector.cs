@@ -1,86 +1,41 @@
 ﻿using Kalavarda.Primitives.Abstract;
-using Kalavarda.Primitives.Units.Fight;
+using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units
 {
-    public interface ITargetSelector
-    {
-        Unit Select(bool fightersOnly = false);
-    }
-
+    // TODO: by mouse position
     public class TargetSelector : ITargetSelector
     {
-        private readonly Unit _hero;
         private readonly Map _map;
-        private readonly IFightController _fightController;
         private readonly IMousePositionDetector _mousePositionDetector;
 
         public float MaxSelectionDistance { get; }
 
-        public TargetSelector(Unit hero, Map map, float maxSelectionDistance, IFightController fightController, IMousePositionDetector mousePositionDetector)
+        public TargetSelector(Map map, float maxSelectionDistance, IMousePositionDetector mousePositionDetector)
         {
-            _hero = hero ?? throw new ArgumentNullException(nameof(hero));
             _map = map ?? throw new ArgumentNullException(nameof(map));
-            _fightController = fightController ?? throw new ArgumentNullException(nameof(fightController));
             _mousePositionDetector = mousePositionDetector ?? throw new ArgumentNullException(nameof(mousePositionDetector));
             MaxSelectionDistance = maxSelectionDistance;
         }
 
-        public Unit Select(bool fightersOnly)
+        public ISelectable Select(bool fightersOnly)
         {
-            var dict = new Dictionary<Unit, float>();
-
+            var dict = new Dictionary<ISelectable, float>();
             var (x, y) = _mousePositionDetector.GetPosition();
-            var mouseAngle = MathF.Atan2(y - _hero.Position.Y, x - _hero.Position.X);
 
-            foreach (var unit in _map.Layers.Where(l => !l.IsHidden).SelectMany(l => l.Objects).OfType<Unit>())
+            foreach (var unit in _map.Layers.Where(l => !l.IsHidden).SelectMany(l => l.Objects).OfType<ISelectable>().Where(s => s.IsSelectable))
             {
-                var distance = _hero.Position.DistanceTo(unit.Position);
-                if (distance > MaxSelectionDistance)
-                    continue;
-
-                if (unit.IsDead)
-                    continue;
-
-                if (fightersOnly)
+                if (unit is IHasPosition hasPosition)
                 {
-                    var mobInFight = false;
-                    if (unit is Mob mob)
-                        if (mob.State == Mob.MobState.Fight)
-                            mobInFight = true;
-                    if (!mobInFight)
-                        continue;
+                    var distance = hasPosition.Position.DistanceTo(x, y);
+                    if (distance < MaxSelectionDistance)
+                        dict.Add(unit, distance);
                 }
-                    
-                var angle = _hero.Position.AngleTo(unit.Position);
-                var angleDiff = angle - mouseAngle;
-                while (angleDiff > MathF.PI)
-                    angleDiff -= 2 * MathF.PI;
-                while (angleDiff < -MathF.PI)
-                    angleDiff += 2 * MathF.PI;
-                angleDiff = MathF.PI - MathF.Abs(angleDiff);
-
-                var value = angleDiff * (MaxSelectionDistance - distance);
-                if (_fightController.CurrentFight != null)
-                    if (_fightController.CurrentFight.MemberIds.Any(id => id == unit.Id))
-                        value *= 2;
-                dict.Add(unit, value);
             }
 
-            if (dict.Count == 0)
-                return null;
-
-            var bestTarget = dict.MaxBy(p => p.Value).Key;
-
-            if (_hero.Target == bestTarget)
-            {
-                dict.Remove(bestTarget);
-                if (dict.Count == 0)
-                    return null;
-                bestTarget = dict.MaxBy(p => p.Value).Key;
-            }
-
-            return bestTarget;
+            return !dict.Any()
+                ? null
+                : dict.MinBy(p => p.Value).Key;
         }
     }
 }

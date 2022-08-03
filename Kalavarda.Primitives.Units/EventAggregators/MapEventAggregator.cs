@@ -4,7 +4,7 @@ using Kalavarda.Primitives.Units.Interfaces;
 
 namespace Kalavarda.Primitives.Units.EventAggregators
 {
-    public class MapEventAggregator: IDisposable, ICreatureEvents, IMakeSounds, ISkillReceiver
+    public class MapEventAggregator: IDisposable, ICreatureEvents, IMakeSounds, ISkillReceiver, ISelectableEvents
     {
         private readonly Map _map;
 
@@ -39,6 +39,13 @@ namespace Kalavarda.Primitives.Units.EventAggregators
                 unit.NegativeSkillReceived += Unit_NegativeSkillReceived;
                 unit.Disposing += Mob_Disposing;
             }
+            if (mapObject is Mob mob)
+                mob.IsSelectableChanged += Mob_IsSelectableChanged;
+        }
+
+        private void Mob_IsSelectableChanged(ISelectable selectable)
+        {
+            IsSelectableChanged?.Invoke(selectable);
         }
 
         private void Unit_NegativeSkillReceived(IFighter fromUnit, IFighter toUnit)
@@ -63,6 +70,9 @@ namespace Kalavarda.Primitives.Units.EventAggregators
             unit.PlaySound -= Mob_PlaySound;
             unit.NegativeSkillReceived -= Unit_NegativeSkillReceived;
             unit.Disposing -= Mob_Disposing;
+
+            if (hasDispose is Mob mob)
+                mob.IsSelectableChanged -= Mob_IsSelectableChanged;
         }
 
         public void Dispose()
@@ -72,6 +82,7 @@ namespace Kalavarda.Primitives.Units.EventAggregators
             {
                 mapLayer.ObjectAdded -= MapLayer_ObjectAdded;
                 foreach (var mapObject in mapLayer.Objects)
+                {
                     if (mapObject is Unit unit)
                     {
                         unit.Died -= Mob_Died;
@@ -79,7 +90,12 @@ namespace Kalavarda.Primitives.Units.EventAggregators
                         unit.NegativeSkillReceived -= Unit_NegativeSkillReceived;
                         unit.Disposing -= Mob_Disposing;
                     }
+                    if (mapObject is Mob mob)
+                        mob.IsSelectableChanged -= Mob_IsSelectableChanged;
+                }
             }
         }
+
+        public event Action<ISelectable> IsSelectableChanged;
     }
 }
